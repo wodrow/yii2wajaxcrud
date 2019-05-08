@@ -19,52 +19,46 @@ echo "<?php\n";
 
 ?>
 use yii\helpers\Url;
+use kartik\grid\DataColumn;
+use kartik\grid\SerialColumn;
+use kartik\grid\EditableColumn;
+use kartik\grid\CheckboxColumn;
+use kartik\grid\ExpandRowColumn;
+use kartik\grid\EnumColumn;
+use kartik\grid\ActionColumn;
 
 return [
     [
-        'class' => 'kartik\grid\CheckboxColumn',
+        'class' => CheckboxColumn::class,
         'width' => '20px',
     ],
     [
-        'class' => 'kartik\grid\SerialColumn',
+        'class' => SerialColumn::class,
         'width' => '30px',
     ],
-    <?php
-    $count = 0;
-    foreach ($generator->getColumnNames() as $name) {   
-        if ($name=='id'||$name=='created_at'||$name=='updated_at'){
-            echo "    // [\n";
-            echo "        // 'class'=>'\kartik\grid\DataColumn',\n";
-            echo "        // 'attribute'=>'" . $name . "',\n";
-            echo "    // ],\n";
-        } else if (++$count < 6) {
-            echo "    [\n";
-            echo "        'class'=>'\kartik\grid\DataColumn',\n";
-            echo "        'attribute'=>'" . $name . "',\n";
-            echo "    ],\n";
-        } else {
-            echo "    // [\n";
-            echo "        // 'class'=>'\kartik\grid\DataColumn',\n";
-            echo "        // 'attribute'=>'" . $name . "',\n";
-            echo "    // ],\n";
-        }
-    }
-    ?>
+    <?php foreach ($generator->getColumnNames() as $name): ?>
     [
-        'class' => 'kartik\grid\ActionColumn',
+        'class' => DataColumn::class,
+        'attribute' => '<?=$name ?>',
+    ],
+    <?php endforeach; ?>
+    [
+        'class' => ActionColumn::class,
         'dropdown' => false,
         'vAlign'=>'middle',
         'urlCreator' => function($action, $model, $key, $index) { 
-                return Url::to([$action,'<?=substr($actionParams,1)?>'=>$key]);
+            return Url::to([$action,'<?=substr($actionParams,1)?>'=>$key]);
         },
         'viewOptions'=>['role'=>'modal-remote','title'=>'View','data-toggle'=>'tooltip'],
         'updateOptions'=>['role'=>'modal-remote','title'=>'Update', 'data-toggle'=>'tooltip'],
-        'deleteOptions'=>['role'=>'modal-remote','title'=>'Delete', 
-                          'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
-                          'data-request-method'=>'post',
-                          'data-toggle'=>'tooltip',
-                          'data-confirm-title'=>'Are you sure?',
-                          'data-confirm-message'=>'Are you sure want to delete this item'], 
+        'deleteOptions'=>[
+            'role'=>'modal-remote','title'=>'Delete',
+            'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
+            'data-request-method'=>'post',
+            'data-toggle'=>'tooltip',
+            'data-confirm-title'=>'删除数据提示!',
+            'data-confirm-message'=>'你确认要删除本条数据吗?'
+        ],
     ],
 
 ];   

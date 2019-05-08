@@ -7,7 +7,7 @@ use yii\helpers\StringHelper;
 
 
 /* @var $this yii\web\View */
-/* @var $generator yii\gii\generators\crud\Generator */
+/* @var $generator \wodrow\wajaxcrud\generators\Generator */
 
 $modelClass = StringHelper::basename($generator->modelClass);
 $searchModelClass = StringHelper::basename($generator->searchModelClass);
@@ -16,6 +16,7 @@ if ($modelClass === $searchModelClass) {
 }
 $rules = $generator->generateSearchRules();
 $labels = $generator->generateSearchLabels();
+$editableScenariosFields = $generator->generateEditableScenariosFields();
 $searchAttributes = $generator->getSearchAttributes();
 $searchConditions = $generator->generateSearchConditions();
 
@@ -44,7 +45,7 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
     public function scenarios()
     {
         return ArrayHelper::merge(parent::scenarios(), [
-            self::SCENARIO_EDITABLE => [],
+            self::SCENARIO_EDITABLE => [<?=implode(',', $editableScenariosFields) ?>],
         ]);
     }
 

@@ -24,12 +24,13 @@ use yii\web\Controller;
  */
 class Generator extends \yii\gii\Generator
 {
+    public $showName = 'wodrow wajaxcrud generator';
     public $modelClass;
     public $controllerClass;
     public $viewPath;
     public $baseControllerClass = 'yii\web\Controller';
     public $searchModelClass = '';
-    public $showName = 'wodrow wajaxcrud generator';
+    public $editableFields;
 
     /**
      * @inheritdoc
@@ -67,6 +68,7 @@ class Generator extends \yii\gii\Generator
             [['enableI18N'], 'boolean'],
             [['messageCategory'], 'validateMessageCategory', 'skipOnEmpty' => false],
             ['viewPath', 'safe'],
+            ['editableFields', 'validateEditableFields'],
         ]);
     }
 
@@ -81,6 +83,7 @@ class Generator extends \yii\gii\Generator
             'viewPath' => 'View Path',
             'baseControllerClass' => 'Base Controller Class',
             'searchModelClass' => 'Search Model Class',
+            'editableFields' => 'Editable Fields',
         ]);
     }
 
@@ -133,6 +136,23 @@ class Generator extends \yii\gii\Generator
         $pk = $class::primaryKey();
         if (empty($pk)) {
             $this->addError('modelClass', "The table associated with $class must have primary key(s).");
+        }
+    }
+
+    public function validateEditableFields()
+    {
+        $class = $this->modelClass;
+        $editableFields = explode(',', $this->editableFields);
+        $pk = $class::primaryKey();
+        foreach ($editableFields as $k => $v) {
+            if (!$v)continue;
+            $v = trim($v);
+            if (in_array($v, $pk)) {
+                $this->addError('editableFields', "primary key(s) can not be editable");
+            }
+            if (!in_array($v, $class::attributes())) {
+                $this->addError('editableFields', "field '{$v}' not found!");
+            }
         }
     }
 
@@ -200,6 +220,18 @@ class Generator extends \yii\gii\Generator
         $pk = $class::primaryKey();
 
         return $pk[0];
+    }
+
+    public function generateEditableScenariosFields()
+    {
+        $editableFields = explode(',', $this->editableFields);
+        foreach ($editableFields as $k => $v) {
+            if (!$v){
+                unset($editableFields[$k]);
+            }
+            $editableFields[$k] = "'{$v}'";
+        }
+        return $editableFields;
     }
 
     /**

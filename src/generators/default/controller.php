@@ -47,6 +47,29 @@ use yii\helpers\Html;
  */
 class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->baseControllerClass) . "\n" ?>
 {
+    public function actions()
+    {
+        return [
+            'editable-edit' => [
+                'class' => EditableColumnAction::class,
+                'modelClass' => <?= isset($searchModelAlias) ? $searchModelAlias : $searchModelClass ?>::class,                // the model for the record being edited
+                'scenario' => <?= isset($searchModelAlias) ? $searchModelAlias : $searchModelClass ?>::SCENARIO_EDITABLE,
+                'outputValue' => function ($model, $attribute, $key, $index) {
+                    return (int)$model->$attribute / 100;      // return any custom output value if desired
+                },
+                '<ou></ou>tputMessage' => function ($model, $attribute, $key, $index) {
+                    return '';                                  // any custom error to return after model save
+                },
+                'showModelErrors' => true,                        // show model validation errors after save
+                'errorOptions' => ['header' => ''],              // error summary HTML options
+                'postOnly' => true,
+                'ajaxOnly' => true,
+                // 'findModel' => function($id, $action) {},
+                // 'checkAccess' => function($action, $model) {}
+            ],
+        ];
+    }
+
     /**
      * @inheritdoc
      */
