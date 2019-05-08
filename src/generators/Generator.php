@@ -29,13 +29,14 @@ class Generator extends \yii\gii\Generator
     public $viewPath;
     public $baseControllerClass = 'yii\web\Controller';
     public $searchModelClass = '';
+    public $showName = 'wodrow wajaxcrud generator';
 
     /**
      * @inheritdoc
      */
     public function getName()
     {
-        return 'wodrow Ajax CRUD Generator';
+        return $this->showName;
     }
 
     /**
@@ -403,7 +404,7 @@ class Generator extends \yii\gii\Generator
                     $hashConditions[] = "'{$column}' => \$this->{$column},";
                     break;
                 default:
-                    $likeConditions[] = "->andFilterWhere(['like', '{$column}', \$this->{$column}])";
+                    $likeConditions[] = "\$this->filterLike(\$query, '{$column}');";
                     break;
             }
         }
@@ -415,7 +416,7 @@ class Generator extends \yii\gii\Generator
                 . "\n" . str_repeat(' ', 8) . "]);\n";
         }
         if (!empty($likeConditions)) {
-            $conditions[] = "\$query" . implode("\n" . str_repeat(' ', 12), $likeConditions) . ";\n";
+            $conditions[] = implode("\n" . str_repeat(' ', 8), $likeConditions) . ";\n";
         }
 
         return $conditions;

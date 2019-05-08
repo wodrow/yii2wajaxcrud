@@ -27,6 +27,8 @@ namespace <?= StringHelper::dirname(ltrim($generator->searchModelClass, '\\')) ?
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\db\ActiveQuery;
+use yii\db\Expression;
 use <?= ltrim($generator->modelClass, '\\') . (isset($modelAlias) ? " as $modelAlias" : "") ?>;
 
 /**
@@ -35,6 +37,8 @@ use <?= ltrim($generator->modelClass, '\\') . (isset($modelAlias) ? " as $modelA
 class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $modelClass ?>
 
 {
+    const EMPTY_STRING = "空字符";
+
     /**
      * @inheritdoc
      */
@@ -56,9 +60,7 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
 
     /**
      * Creates data provider instance with search query applied
-     *
      * @param array $params
-     *
      * @return ActiveDataProvider
      */
     public function search($params)
@@ -72,13 +74,31 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
-        <?= implode("\n        ", $searchConditions) ?>
+        <?= implode("        ", $searchConditions) ?>
 
         return $dataProvider;
+    }
+
+    /**
+     * @param ActiveQuery $query
+     * @param $attribute
+     */
+    protected function filterLike(&$query, $attribute)
+    {
+        $this->$attribute = trim($this->$attribute);
+        switch($this->$attribute){
+            case \Yii::t('yii', '(not set)'):
+                $query->andFilterWhere(['IS', $attribute, new Expression('NULL')]);
+                break;
+            case self::EMPTY_STRING:
+                $query->andWhere([$attribute=>'']);
+                break;
+            default:
+                $query->andFilterWhere(['like', $attribute, $this->$attribute]);
+                break;
+        }
     }
 }
