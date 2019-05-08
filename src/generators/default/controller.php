@@ -245,7 +245,8 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     public function actionDelete(<?= $actionParams ?>)
     {
         $request = Yii::$app->request;
-        $this->findModel(<?= $actionParams ?>)->delete();
+        $model = $this->findModel(<?= $actionParams ?>);
+        // $model->delete();
 
         if($request->isAjax){
             /*
@@ -276,7 +277,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
         foreach ( $pks as $pk ) {
             $model = $this->findModel($pk);
-            $model->delete();
+            // $model->delete();
         }
 
         if($request->isAjax){
