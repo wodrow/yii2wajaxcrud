@@ -1,5 +1,5 @@
 <?php
-namespace johnitvn\ajaxcrud\generators;
+namespace wodrow\wajaxcrud\generators;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -35,7 +35,7 @@ class Generator extends \yii\gii\Generator
      */
     public function getName()
     {
-        return 'Ajax CRUD Generator';
+        return 'wodrow Ajax CRUD Generator';
     }
 
     /**

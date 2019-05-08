@@ -1,6 +1,6 @@
 <?php 
 
-namespace johnitvn\ajaxcrud;
+namespace wodrow\wajaxcrud;
 
 use yii\web\AssetBundle;
 
