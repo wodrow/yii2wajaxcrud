@@ -70,19 +70,14 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
     public function search($params)
     {
         $query = self::find();
-
+        $this->load($params);
+        <?= implode("        ", $searchConditions) ?>
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
-        $this->load($params);
-
         if (!$this->validate()) {
             return $dataProvider;
         }
-
-        <?= implode("        ", $searchConditions) ?>
-
         return $dataProvider;
     }
 
