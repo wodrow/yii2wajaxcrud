@@ -41,6 +41,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
+use kartik\grid\EditableColumnAction;
 
 /**
  * <?= $controllerClass ?> implements the CRUD actions for <?= $modelClass ?> model.
@@ -57,7 +58,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                 'outputValue' => function ($model, $attribute, $key, $index) {
                     return (int)$model->$attribute / 100;      // return any custom output value if desired
                 },
-                '<ou></ou>tputMessage' => function ($model, $attribute, $key, $index) {
+                'outputMessage' => function ($model, $attribute, $key, $index) {
                     return '';                                  // any custom error to return after model save
                 },
                 'showModelErrors' => true,                        // show model validation errors after save

@@ -16,7 +16,10 @@ if ($modelClass === $searchModelClass) {
 }
 $rules = $generator->generateSearchRules();
 $labels = $generator->generateSearchLabels();
-$editableScenariosFields = $generator->generateEditableScenariosFields();
+$editableFields = $generator->generateEditableFields();
+foreach ($editableFields as $k => $v) {
+    $editableFields[$k] = "'{$v}'";
+}
 $searchAttributes = $generator->getSearchAttributes();
 $searchConditions = $generator->generateSearchConditions();
 
@@ -45,7 +48,7 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
     public function scenarios()
     {
         return ArrayHelper::merge(parent::scenarios(), [
-            self::SCENARIO_EDITABLE => [<?=implode(',', $editableScenariosFields) ?>],
+            self::SCENARIO_EDITABLE => [<?=implode(',', $editableFields) ?>],
         ]);
     }
 
@@ -66,7 +69,7 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
      */
     public function search($params)
     {
-        $query = <?= isset($modelAlias) ? $modelAlias : $modelClass ?>::find();
+        $query = self::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

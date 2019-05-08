@@ -222,14 +222,13 @@ class Generator extends \yii\gii\Generator
         return $pk[0];
     }
 
-    public function generateEditableScenariosFields()
+    public function generateEditableFields()
     {
         $editableFields = explode(',', $this->editableFields);
         foreach ($editableFields as $k => $v) {
             if (!$v){
                 unset($editableFields[$k]);
             }
-            $editableFields[$k] = "'{$v}'";
         }
         return $editableFields;
     }

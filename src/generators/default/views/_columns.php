@@ -8,12 +8,14 @@ use yii\helpers\StringHelper;
 
 
 /* @var $this yii\web\View */
-/* @var $generator yii\gii\generators\crud\Generator */
+/* @var $generator \wodrow\wajaxcrud\generators\Generator */
 
 $modelClass = StringHelper::basename($generator->modelClass);
 $urlParams = $generator->generateUrlParams();
 $nameAttribute = $generator->getNameAttribute();
 $actionParams = $generator->generateActionParams();
+
+$editableFields = $generator->generateEditableFields();
 
 echo "<?php\n";
 
@@ -36,11 +38,26 @@ return [
         'class' => SerialColumn::class,
         'width' => '30px',
     ],
-    <?php foreach ($generator->getColumnNames() as $name): ?>
-    [
+    <?php foreach ($generator->getColumnNames() as $name): ?><?php if(in_array($name, $editableFields)): ?>[
+        'class' => EditableColumn::class,
+        'attribute' => '<?=$name ?>',
+        'readonly' => function ($model, $key, $index, $widget) {
+            return false;
+        },
+        'editableOptions' => function ($model, $key, $index, $widget) {
+            return [
+                'header' => '修改',
+                'size' => 'md',
+                'formOptions' => ['action' => ['editable-edit']],
+            ];
+        },
+        'refreshGrid' => true,
+    ],
+    <?php else: ?>[
         'class' => DataColumn::class,
         'attribute' => '<?=$name ?>',
     ],
+    <?php endif; ?>
     <?php endforeach; ?>
     [
         'class' => ActionColumn::class,
