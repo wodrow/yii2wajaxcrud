@@ -150,7 +150,7 @@ class Generator extends \yii\gii\Generator
             if (in_array($v, $pk)) {
                 $this->addError('editableFields', "primary key(s) can not be editable");
             }
-            if (!in_array($v, $class::attributes())) {
+            if (!in_array($v, (new $class)->attributes())) {
                 $this->addError('editableFields', "field '{$v}' not found!");
             }
         }
