@@ -59,7 +59,7 @@ $config['modules']['gii'] = [
     'class' => 'yii\gii\Module',
 ];
 $config['modules']['gii']['generators']['wodrowwajaxcrud'] = [
-    'class' => \wodrow\wajaxcrud\generators\Generator::class,
+    'class' => \wodrow\wajaxcrud\generators\crud\Generator::class,
     'showName' => "YOUR AJAX CRUD GENERATOR",
 ];
 ````
