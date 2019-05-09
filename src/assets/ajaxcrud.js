@@ -45,9 +45,9 @@ $(document).ready(function () {
         if (selectedIds.length == 0) {
             // If no selected ID's show warning
             modal.show();
-            modal.setTitle('No selection');
-            modal.setContent('You must select item(s) to use this action');
-            modal.addFooterButton("Close", 'button', 'btn btn-default', function (button, event) {
+            modal.setTitle('未选择任何行');
+            modal.setContent('你必须选择至少一条数据');
+            modal.addFooterButton("关闭", 'button', 'btn btn-default', function (button, event) {
                 this.hide();
             });
         } else {

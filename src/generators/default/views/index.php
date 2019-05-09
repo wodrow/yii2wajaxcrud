@@ -161,8 +161,8 @@ CrudAsset::register($this);
                                     'role'=>'modal-remote-bulk',
                                     'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
                                     'data-request-method'=>'post',
-                                    'data-confirm-title'=>'Are you sure?',
-                                    'data-confirm-message'=>'Are you sure want to delete this item'
+                                    'data-confirm-title'=>'删除数据提示!',
+                                    'data-confirm-message'=>'你确认要删除这些数据吗?'
                                 ]),
                         ]).                        
                         '<div class="clearfix"></div>',
