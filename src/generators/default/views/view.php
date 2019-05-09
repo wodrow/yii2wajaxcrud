@@ -20,6 +20,13 @@ use kartik\detail\DetailView;
  
     <?= "<?= " ?>DetailView::widget([
         'model' => $model,
+        'condensed' => true,
+        'hover' => true,
+        'enableEditMode' => false,
+        'panel' => [
+            'heading' => "详细",
+            'type' => DetailView::TYPE_INFO,
+        ],
         'attributes' => [
 <?php
             if (($tableSchema = $generator->getTableSchema()) === false) {

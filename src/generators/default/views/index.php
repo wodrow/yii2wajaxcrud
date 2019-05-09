@@ -75,7 +75,7 @@ CrudAsset::register($this);
                         return GridView::ROW_COLLAPSED;
                     },
                     'detail' => function ($model, $key, $index, $column) {
-                        return "set your expand url";
+                        return $this->render('view', ['model' => $model]);
                     },
                     'expandOneOnly' => true,
                 ],
