@@ -7,8 +7,6 @@ yii2wajaxcrud
 
 Gii CRUD template for Single Page Ajax Administration for yii2 
 
-![yii2 ajaxcrud extension screenshot](https://c1.staticflickr.com/1/330/18659931433_6e3db2461d_o.png "yii2 ajaxcrud extension screenshot")
-
 
 Features
 ------------
@@ -16,6 +14,8 @@ Features
 + Bulk delete suport
 + Pjax widget suport
 + Export function(pdf,html,text,csv,excel,json)
++ Editable suport
++ Daterange suport
 
 Installation
 ------------
