@@ -266,11 +266,17 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
      * <?= implode("\n     * ", $actionParamComments) . "\n" ?>
      * @return mixed
      */
-    public function actionDelete(<?= $actionParams ?>)
+    public function actionDelete(<?= $actionParams ?>, $type = 'hard')
     {
         $request = Yii::$app->request;
         $model = $this->findModel(<?= $actionParams ?>);
-        // $model->delete();
+        switch($type){
+            case 'hard':
+                $model->delete();
+                break;
+            default:
+                break;
+        }
 
         if($request->isAjax){
             /*
@@ -295,13 +301,19 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
      * <?= implode("\n     * ", $actionParamComments) . "\n" ?>
      * @return mixed
      */
-    public function actionBulkdelete()
+    public function actionBulkdelete($type = 'hard')
     {        
         $request = Yii::$app->request;
         $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
         foreach ( $pks as $pk ) {
             $model = $this->findModel($pk);
-            // $model->delete();
+            switch($type){
+                case 'hard':
+                    $model->delete();
+                    break;
+                default:
+                    break;
+            }
         }
 
         if($request->isAjax){

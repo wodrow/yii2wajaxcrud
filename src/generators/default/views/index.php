@@ -127,7 +127,7 @@ CrudAsset::register($this);
                     'dropdown' => false,
                     'vAlign'=>'middle',
                     'urlCreator' => function($action, $model, $key, $index) {
-                        return Url::to([$action,'<?=substr($actionParams,1)?>'=>$key]);
+                        return Url::to([$action,'<?=substr($actionParams,1)?>'=>$key, 'type' => "soft"]);
                     },
                     'viewOptions'=>['role'=>'modal-remote','title'=>'View','data-toggle'=>'tooltip'],
                     'updateOptions'=>['role'=>'modal-remote','title'=>'Update', 'data-toggle'=>'tooltip'],
@@ -157,7 +157,7 @@ CrudAsset::register($this);
                 'before'=>'<em>* 你可以拖动改变单列的宽度；筛选框输入<code><?=\Yii::t('yii', '(not set)')?></code>会只搜索值为空的数据；筛选框输入<code>'.$searchModel::EMPTY_STRING.'</code>会只搜索值为空字符的数据。</em>',
                 'after'=>BulkButtonWidget::widget([
                             'buttons'=>Html::a('<i class="glyphicon glyphicon-trash"></i>&nbsp; 删除选择',
-                                ["bulkdelete"] ,
+                                ["bulkdelete", 'type' => "soft"] ,
                                 [
                                     "class"=>"btn btn-danger btn-xs",
                                     'role'=>'modal-remote-bulk',
