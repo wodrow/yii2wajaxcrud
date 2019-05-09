@@ -1,7 +1,7 @@
 <?php
 /* @var $this yii\web\View */
 /* @var $form yii\widgets\ActiveForm */
-/* @var $generator wodrow\wajaxcrud\generators\Generator */
+/* @var $generator wodrow\wajaxcrud\generators\crud\Generator */
 
 echo '<h3>General Configuration</h2>';
 echo $form->field($generator, 'modelClass');

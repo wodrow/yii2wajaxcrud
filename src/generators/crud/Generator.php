@@ -1,5 +1,5 @@
 <?php
-namespace wodrow\wajaxcrud\generators;
+namespace wodrow\wajaxcrud\generators\crud;
 
 use Yii;
 use yii\db\ActiveRecord;

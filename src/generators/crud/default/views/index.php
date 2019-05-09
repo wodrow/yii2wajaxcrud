@@ -8,7 +8,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $generator \wodrow\wajaxcrud\generators\Generator */
+/* @var $generator \wodrow\wajaxcrud\generators\crud\Generator */
 $modelClass = StringHelper::basename($generator->modelClass);
 $urlParams = $generator->generateUrlParams();
 $nameAttribute = $generator->getNameAttribute();
