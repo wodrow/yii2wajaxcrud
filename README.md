@@ -1,9 +1,9 @@
-yii2-ajaxcrud 
+yii2wajaxcrud 
 =============
 
-[![Latest Stable Version](https://poser.pugx.org/johnitvn/yii2-ajaxcrud/v/stable)](https://packagist.org/packages/johnitvn/yii2-ajaxcrud)
-[![License](https://poser.pugx.org/johnitvn/yii2-ajaxcrud/license)](https://packagist.org/packages/johnitvn/yii2-ajaxcrud)
-[![Total Downloads](https://poser.pugx.org/johnitvn/yii2-ajaxcrud/downloads)](https://packagist.org/packages/johnitvn/yii2-ajaxcrud)
+[![Latest Stable Version](https://poser.pugx.org/wodrow/yii2wajaxcrud/v/stable)](https://packagist.org/packages/wodrow/yii2wajaxcrud)
+[![License](https://poser.pugx.org/wodrow/yii2wajaxcrud/license)](https://packagist.org/packages/wodrow/yii2wajaxcrud)
+[![Total Downloads](https://poser.pugx.org/wodrow/yii2wajaxcrud/downloads)](https://packagist.org/packages/wodrow/yii2wajaxcrud)
 
 Gii CRUD template for Single Page Ajax Administration for yii2 
 
@@ -25,13 +25,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require --prefer-dist johnitvn/yii2-ajaxcrud "*"
+php composer.phar require --prefer-dist wodrow/yii2wajaxcrud "^2.1"
 ```
 
 or add
 
 ```
-"johnitvn/yii2-ajaxcrud": "*"
+"wodrow/yii2wajaxcrud": "^2.1"
 ```
 
 to the require section of your `composer.json` file.
@@ -52,12 +52,24 @@ Let 's add into modules config in your main config file
 ]
 ````
 
+gii config like
+````php
+$config['bootstrap'][] = 'gii';
+$config['modules']['gii'] = [
+    'class' => 'yii\gii\Module',
+];
+$config['modules']['gii']['generators']['wodrowwajaxcrud'] = [
+    'class' => \wodrow\wajaxcrud\generators\Generator::class,
+    'showName' => "YOUR AJAX CRUD GENERATOR",
+];
+````
+
 You can then access Gii through the following URL:
 
 http://localhost/path/to/index.php?r=gii
 
-and you can see <b>Ajax CRUD Generator</b>
+and you can see <b>YOUR AJAX CRUD GENERATOR</b>
 
-Other Links
-[Free download wordpress theme](https://w3deep.com/wordpress-theme/)
-[Free download html template](https://w3deep.com/html-template/)
+![exp1](https://i.loli.net/2019/05/09/5cd3a7c2cb95a.png)
+![exp2](https://i.loli.net/2019/05/09/5cd3a7c2cee7a.png)
+![exp3](https://i.loli.net/2019/05/09/5cd3a7c2d14a9.png)
