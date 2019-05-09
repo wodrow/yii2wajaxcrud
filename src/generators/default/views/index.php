@@ -107,11 +107,13 @@ CrudAsset::register($this);
                             'timePicker' => true,
                             'timePickerIncrement' => 30,
                             'locale' => [
-                                'format' => 'Y-m-d H:i'
+                                'format' => 'Y-m-d H:i',
+                                'cancelLabel' => "清除",
                             ],
                         ],
                         'useWithAddon' => true,
-                        'presetDropdown' => true,
+                        'presetDropdown' => true,,
+                        'pjaxContainerId' => "crud-datatable-pjax",
                     ]),
                 ],
                 <?php else: ?>[

@@ -47,7 +47,7 @@ $(document).ready(function () {
             modal.show();
             modal.setTitle('未选择任何行');
             modal.setContent('你必须选择至少一条数据');
-            modal.addFooterButton("关闭", 'button', 'btn btn-default', function (button, event) {
+            modal.addFooterButton("Close", 'button', 'btn btn-default', function (button, event) {
                 this.hide();
             });
         } else {
