@@ -173,6 +173,9 @@ class Generator extends \yii\gii\Generator
             if (!in_array($v, (new $class)->attributes())) {
                 $this->addError('dateRangeFields', "field '{$v}' not found!");
             }
+            if (in_array($v, $this->generateEditableFields())) {
+                $this->addError('dateRangeFields', "can not be editable");
+            }
         }
     }
 

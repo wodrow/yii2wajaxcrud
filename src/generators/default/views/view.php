@@ -11,7 +11,7 @@ $urlParams = $generator->generateUrlParams();
 echo "<?php\n";
 ?>
 
-use yii\widgets\DetailView;
+use kartik\detail\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model <?= ltrim($generator->modelClass, '\\') ?> */
