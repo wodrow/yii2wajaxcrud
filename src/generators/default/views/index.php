@@ -37,7 +37,12 @@ CrudAsset::register($this);
             'id'=>'crud-datatable',
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
-            'pjax'=>true,
+            'responsive' => true,
+            'showPageSummary' => true,
+            'pjax' => true,
+            'hover' => true,
+            'striped' => true,
+            'condensed' => true,
             'columns' => require(__DIR__.'/_columns.php'),
             'toolbar'=> [
                 ['content'=>
@@ -48,10 +53,7 @@ CrudAsset::register($this);
                     '{toggleData}'.
                     '{export}'
                 ],
-            ],          
-            'striped' => true,
-            'condensed' => true,
-            'responsive' => true,          
+            ],
             'panel' => [
                 'type' => 'primary', 
                 'heading' => '<i class="glyphicon glyphicon-list"></i> <?= Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass))) ?> listing',

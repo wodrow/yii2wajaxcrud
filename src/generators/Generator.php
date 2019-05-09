@@ -31,6 +31,7 @@ class Generator extends \yii\gii\Generator
     public $baseControllerClass = 'yii\web\Controller';
     public $searchModelClass = '';
     public $editableFields;
+    public $dateRangeFields;
 
     /**
      * @inheritdoc
@@ -69,6 +70,7 @@ class Generator extends \yii\gii\Generator
             [['messageCategory'], 'validateMessageCategory', 'skipOnEmpty' => false],
             ['viewPath', 'safe'],
             ['editableFields', 'validateEditableFields'],
+            ['dateRangeFields', 'validateDateRangeFields'],
         ]);
     }
 
@@ -84,6 +86,7 @@ class Generator extends \yii\gii\Generator
             'baseControllerClass' => 'Base Controller Class',
             'searchModelClass' => 'Search Model Class',
             'editableFields' => 'Editable Fields',
+            'dateRangeFields' => 'Date Range Fields',
         ]);
     }
 
@@ -142,9 +145,9 @@ class Generator extends \yii\gii\Generator
     public function validateEditableFields()
     {
         $class = $this->modelClass;
-        $editableFields = explode(',', $this->editableFields);
+        $fields = explode(',', $this->editableFields);
         $pk = $class::primaryKey();
-        foreach ($editableFields as $k => $v) {
+        foreach ($fields as $k => $v) {
             if (!$v)continue;
             $v = trim($v);
             if (in_array($v, $pk)) {
@@ -152,6 +155,23 @@ class Generator extends \yii\gii\Generator
             }
             if (!in_array($v, (new $class)->attributes())) {
                 $this->addError('editableFields', "field '{$v}' not found!");
+            }
+        }
+    }
+
+    public function validateDateRangeFields()
+    {
+        $class = $this->modelClass;
+        $fields = explode(',', $this->dateRangeFields);
+        $pk = $class::primaryKey();
+        foreach ($fields as $k => $v) {
+            if (!$v)continue;
+            $v = trim($v);
+            if (in_array($v, $pk)) {
+                $this->addError('dateRangeFields', "primary key(s) can not be date range");
+            }
+            if (!in_array($v, (new $class)->attributes())) {
+                $this->addError('dateRangeFields', "field '{$v}' not found!");
             }
         }
     }
@@ -224,13 +244,24 @@ class Generator extends \yii\gii\Generator
 
     public function generateEditableFields()
     {
-        $editableFields = explode(',', $this->editableFields);
-        foreach ($editableFields as $k => $v) {
+        $fields = explode(',', $this->editableFields);
+        foreach ($fields as $k => $v) {
             if (!$v){
-                unset($editableFields[$k]);
+                unset($fields[$k]);
             }
         }
-        return $editableFields;
+        return $fields;
+    }
+
+    public function generateDateRangeFields()
+    {
+        $fields = explode(',', $this->dateRangeFields);
+        foreach ($fields as $k => $v) {
+            if (!$v){
+                unset($fields[$k]);
+            }
+        }
+        return $fields;
     }
 
     /**
@@ -326,34 +357,44 @@ class Generator extends \yii\gii\Generator
         }
         $types = [];
         foreach ($table->columns as $column) {
-            switch ($column->type) {
-                case Schema::TYPE_SMALLINT:
-                case Schema::TYPE_INTEGER:
-                case Schema::TYPE_BIGINT:
-                    $types['integer'][] = $column->name;
-                    break;
-                case Schema::TYPE_BOOLEAN:
-                    $types['boolean'][] = $column->name;
-                    break;
-                case Schema::TYPE_FLOAT:
-                case Schema::TYPE_DOUBLE:
-                case Schema::TYPE_DECIMAL:
-                case Schema::TYPE_MONEY:
-                    $types['number'][] = $column->name;
-                    break;
-                case Schema::TYPE_DATE:
-                case Schema::TYPE_TIME:
-                case Schema::TYPE_DATETIME:
-                case Schema::TYPE_TIMESTAMP:
-                default:
-                    $types['safe'][] = $column->name;
-                    break;
+            if (in_array($column->name, $this->generateDateRangeFields())){
+                // [['created_at'], 'match', 'pattern' => '/^.+\s\-\s.+$/'],
+                $types['match']['columns'][] = $column->name;
+                $types['match']['pattern'] = '/^.+\s\-\s.+$/';
+            }else{
+                switch ($column->type) {
+                    case Schema::TYPE_SMALLINT:
+                    case Schema::TYPE_INTEGER:
+                    case Schema::TYPE_BIGINT:
+                        $types['integer']['columns'][] = $column->name;
+                        break;
+                    case Schema::TYPE_BOOLEAN:
+                        $types['boolean']['columns'][] = $column->name;
+                        break;
+                    case Schema::TYPE_FLOAT:
+                    case Schema::TYPE_DOUBLE:
+                    case Schema::TYPE_DECIMAL:
+                    case Schema::TYPE_MONEY:
+                        $types['number']['columns'][] = $column->name;
+                        break;
+                    case Schema::TYPE_DATE:
+                    case Schema::TYPE_TIME:
+                    case Schema::TYPE_DATETIME:
+                    case Schema::TYPE_TIMESTAMP:
+                    default:
+                        $types['safe']['columns'][] = $column->name;
+                        break;
+                }
             }
         }
 
         $rules = [];
         foreach ($types as $type => $columns) {
-            $rules[] = "[['" . implode("', '", $columns) . "'], '$type']";
+            if ($type == 'match'){
+                $rules[] = "[['" . implode("', '", $columns['columns']) . "'], '$type', 'pattern' => '{$columns['pattern']}']";
+            }else{
+                $rules[] = "[['" . implode("', '", $columns['columns']) . "'], '$type']";
+            }
         }
 
         return $rules;
@@ -402,6 +443,7 @@ class Generator extends \yii\gii\Generator
      */
     public function generateSearchConditions()
     {
+        $conditions = [];
         $columns = [];
         if (($table = $this->getTableSchema()) === false) {
             $class = $this->modelClass;
@@ -419,28 +461,37 @@ class Generator extends \yii\gii\Generator
         $likeConditions = [];
         $hashConditions = [];
         foreach ($columns as $column => $type) {
-            switch ($type) {
-                case Schema::TYPE_SMALLINT:
-                case Schema::TYPE_INTEGER:
-                case Schema::TYPE_BIGINT:
-                case Schema::TYPE_BOOLEAN:
-                case Schema::TYPE_FLOAT:
-                case Schema::TYPE_DOUBLE:
-                case Schema::TYPE_DECIMAL:
-                case Schema::TYPE_MONEY:
-                case Schema::TYPE_DATE:
-                case Schema::TYPE_TIME:
-                case Schema::TYPE_DATETIME:
-                case Schema::TYPE_TIMESTAMP:
-                    $hashConditions[] = "'{$column}' => \$this->{$column},";
-                    break;
-                default:
-                    $likeConditions[] = "\$this->filterLike(\$query, '{$column}');";
-                    break;
+            if (in_array($column, $this->generateDateRangeFields())){
+                $conditions[] = <<<HTML
+if ( ! is_null(\$this->{$column}) && strpos(\$this->{$column}, ' - ') !== false ) {
+            list(\$s, \$e) = explode(' - ', \$this->{$column});
+            \$query->andFilterWhere(['between', '{$column}', strtotime(\$s), strtotime(\$e)]);
+        }\n
+HTML;
+
+            }else{
+                switch ($type) {
+                    case Schema::TYPE_SMALLINT:
+                    case Schema::TYPE_INTEGER:
+                    case Schema::TYPE_BIGINT:
+                    case Schema::TYPE_BOOLEAN:
+                    case Schema::TYPE_FLOAT:
+                    case Schema::TYPE_DOUBLE:
+                    case Schema::TYPE_DECIMAL:
+                    case Schema::TYPE_MONEY:
+                    case Schema::TYPE_DATE:
+                    case Schema::TYPE_TIME:
+                    case Schema::TYPE_DATETIME:
+                    case Schema::TYPE_TIMESTAMP:
+                        $hashConditions[] = "'{$column}' => \$this->{$column},";
+                        break;
+                    default:
+                        $likeConditions[] = "\$this->filterLike(\$query, '{$column}');";
+                        break;
+                }
             }
         }
 
-        $conditions = [];
         if (!empty($hashConditions)) {
             $conditions[] = "\$query->andFilterWhere([\n"
                 . str_repeat(' ', 12) . implode("\n" . str_repeat(' ', 12), $hashConditions)

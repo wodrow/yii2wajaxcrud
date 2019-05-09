@@ -16,11 +16,13 @@ $nameAttribute = $generator->getNameAttribute();
 $actionParams = $generator->generateActionParams();
 
 $editableFields = $generator->generateEditableFields();
+$dateRangeFields = $generator->generateDateRangeFields();
 
 echo "<?php\n";
 
 ?>
 use yii\helpers\Url;
+use kartik\grid\GridView;
 use kartik\grid\DataColumn;
 use kartik\grid\SerialColumn;
 use kartik\grid\EditableColumn;
@@ -28,6 +30,11 @@ use kartik\grid\CheckboxColumn;
 use kartik\grid\ExpandRowColumn;
 use kartik\grid\EnumColumn;
 use kartik\grid\ActionColumn;
+use kartik\daterange\DateRangePicker;
+
+/* @var $this yii\web\View */
+<?= !empty($generator->searchModelClass) ? "/* @var \$searchModel " . ltrim($generator->searchModelClass, '\\') . " */\n" : '' ?>
+/* @var $dataProvider yii\data\ActiveDataProvider */
 
 return [
     [
@@ -36,7 +43,18 @@ return [
     ],
     [
         'class' => SerialColumn::class,
-        'width' => '30px',
+        'width' => '40px',
+        'pageSummary' => "合计",
+    ],
+    [
+        'class' => ExpandRowColumn::class,
+        'value' => function ($model, $key, $index, $column) {
+            return GridView::ROW_COLLAPSED;
+        },
+        'detail' => function ($model, $key, $index, $column) {
+            return "set your expand url";
+        },
+        'expandOneOnly' => true,
     ],
     <?php foreach ($generator->getColumnNames() as $name): ?><?php if(in_array($name, $editableFields)): ?>[
         'class' => EditableColumn::class,
@@ -52,6 +70,26 @@ return [
             ];
         },
         'refreshGrid' => true,
+    ],
+    <?php elseif (in_array($name, $dateRangeFields)): ?>[
+        'class' => DataColumn::class,
+        'attribute' => '<?=$name ?>',
+        'format' => ['date', 'php:Y-m-d H:i'],
+        'filter' => DateRangePicker::widget([
+            'model' => $searchModel,
+            'attribute' => '<?=$name ?>',
+            'convertFormat' => true,
+            'pluginOptions' => [
+                'opens' => 'left',
+                'timePicker' => true,
+                'timePickerIncrement' => 30,
+                'locale' => [
+                    'format' => 'Y-m-d H:i'
+                ]
+            ],
+            'useWithAddon' => true,
+            'presetDropdown' => true,
+        ]),
     ],
     <?php else: ?>[
         'class' => DataColumn::class,
