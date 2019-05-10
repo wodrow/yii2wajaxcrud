@@ -60,7 +60,8 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->extendModelClass, '
 
     public function rules()
     {
-        return ArrayHelper::merge(parent::rules(), []);
+        $rules = parent::rules();
+        return ArrayHelper::merge($rules, []);
     }
 
     /**
@@ -68,7 +69,8 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->extendModelClass, '
      */
     public function attributeLabels()
     {
-        return ArrayHelper::merge(parent::attributeLabels(), []);
+        $attributeLabels = parent::attributeLabels();
+        return ArrayHelper::merge($attributeLabels, []);
     }
 <?php foreach ($relations as $name => $relation): ?>
 
