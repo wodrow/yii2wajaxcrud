@@ -26,12 +26,16 @@ Either run
 
 ```
 php composer.phar require --prefer-dist wodrow/yii2wajaxcrud "^2.1"
+or
+php composer.phar require --prefer-dist wodrow/yii2wajaxcrud "^3.0"
 ```
 
 or add
 
 ```
 "wodrow/yii2wajaxcrud": "^2.1"
+or
+"wodrow/yii2wajaxcrud": "^3.0"
 ```
 
 to the require section of your `composer.json` file.
