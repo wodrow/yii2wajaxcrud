@@ -17,18 +17,16 @@
 echo "<?php\n";
 ?>
 
-namespace <?= $generator->ns ?>;
+namespace <?= $generator->baseNs ?>;
 
 use Yii;
-use yii\helpers\ArrayHelper;
-use yii\behaviors\BlameableBehavior;
-use yii\behaviors\TimestampBehavior;
-use wodrow\yii2wtools\behaviors\Uuid;
 
 /**
  * This is the model class for table "<?= $generator->generateTableName($tableName) ?>".
  *
- * @author
+<?php foreach ($properties as $property => $data): ?>
+ * @property <?= "{$data['type']} \${$property}"  . ($data['comment'] ? ' ' . strtr($data['comment'], ["\n" => ' ']) : '') . "\n" ?>
+<?php endforeach; ?>
 <?php if (!empty($relations)): ?>
  *
 <?php foreach ($relations as $name => $relation): ?>
@@ -36,31 +34,32 @@ use wodrow\yii2wtools\behaviors\Uuid;
 <?php endforeach; ?>
 <?php endif; ?>
  */
-class <?= $className ?> extends <?= '\\' . ltrim($generator->extendModelClass, '\\') . "\n" ?>
+class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . "\n" ?>
 {
-    public function behaviors()
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
     {
-        return ArrayHelper::merge(parent::behaviors(), [
-            'timestamp' => [
-                'class' => TimestampBehavior::class,
-                'createdAtAttribute' => false,
-                'updatedAtAttribute' => false,
-            ],
-            'blameable' => [
-                'class' => BlameableBehavior::class,
-                'createdByAttribute' => false,
-                'updatedByAttribute' => false,
-            ],
-            'uuid' => [
-                'class' => Uuid::class,
-                'column' => false,
-            ],
-        ]);
+        return '<?= $generator->generateTableName($tableName) ?>';
     }
+<?php if ($generator->db !== 'db'): ?>
 
+    /**
+     * @return \yii\db\Connection the database connection used by this AR class.
+     */
+    public static function getDb()
+    {
+        return Yii::$app->get('<?= $generator->db ?>');
+    }
+<?php endif; ?>
+
+    /**
+     * {@inheritdoc}
+     */
     public function rules()
     {
-        return ArrayHelper::merge(parent::rules(), []);
+        return [<?= empty($rules) ? '' : ("\n            " . implode(",\n            ", $rules) . ",\n        ") ?>];
     }
 
     /**
@@ -68,7 +67,11 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->extendModelClass, '
      */
     public function attributeLabels()
     {
-        return ArrayHelper::merge(parent::attributeLabels(), []);
+        return [
+<?php foreach ($labels as $name => $label): ?>
+            <?= "'$name' => " . $generator->generateString($label) . ",\n" ?>
+<?php endforeach; ?>
+        ];
     }
 <?php foreach ($relations as $name => $relation): ?>
 

@@ -58,6 +58,10 @@ $config['bootstrap'][] = 'gii';
 $config['modules']['gii'] = [
     'class' => 'yii\gii\Module',
 ];
+$config['modules']['gii']['generators']['wodrowmodel'] = [
+    'class' => \wodrow\wajaxcrud\generators\model\Generator::class,
+    'showName' => "YOUR MODEL GENERATOR",
+];
 $config['modules']['gii']['generators']['wodrowwajaxcrud'] = [
     'class' => \wodrow\wajaxcrud\generators\crud\Generator::class,
     'showName' => "YOUR AJAX CRUD GENERATOR",
