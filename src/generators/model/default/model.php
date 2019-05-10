@@ -61,6 +61,11 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->extendModelClass, '
     public function rules()
     {
         $rules = parent::rules();
+        /*foreach ($rules as $k => $v) {
+            if ($v[1] == 'required'){
+                $rules[$k][0] = array_diff($rules[$k][0], ['created_at', 'updated_at', 'created_by', 'updated_by']);
+            }
+        }*/
         return ArrayHelper::merge($rules, []);
     }
 
