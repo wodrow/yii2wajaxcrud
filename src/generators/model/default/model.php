@@ -51,10 +51,10 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->extendModelClass, '
                 'createdByAttribute' => false,
                 'updatedByAttribute' => false,
             ],
-            'uuid' => [
+            /*'uuid' => [
                 'class' => Uuid::class,
                 'column' => false,
-            ],
+            ],*/
         ]);
     }
 
