@@ -18,7 +18,7 @@ class Bootstrap implements BootstrapInterface {
      * @param Application $app the application currently running
      */
     public function bootstrap($app) {
-        Yii::setAlias("@ajaxcrud", __DIR__);
+        Yii::setAlias("@wajaxcrud", __DIR__);
         Yii::setAlias("@wodrow/wajaxcrud", __DIR__);
         /*if ($app->hasModule('gii')) {
             if (!isset($app->getModule('gii')->generators['ajaxcrud'])) {

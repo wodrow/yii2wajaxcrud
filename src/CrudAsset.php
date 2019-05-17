@@ -10,7 +10,7 @@ use yii\web\AssetBundle;
  */
 class CrudAsset extends AssetBundle
 {
-    public $sourcePath = '@ajaxcrud/assets';
+    public $sourcePath = '@wajaxcrud/assets';
 
 //    public $publishOptions = [
 //        'forceCopy' => true,
