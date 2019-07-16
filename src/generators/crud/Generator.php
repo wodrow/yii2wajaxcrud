@@ -32,6 +32,7 @@ class Generator extends \yii\gii\Generator
     public $searchModelClass = '';
     public $editableFields;
     public $dateRangeFields;
+    public $statusField = 'status';
 
     /**
      * @inheritdoc
@@ -71,6 +72,7 @@ class Generator extends \yii\gii\Generator
             ['viewPath', 'safe'],
             ['editableFields', 'validateEditableFields'],
             ['dateRangeFields', 'validateDateRangeFields'],
+            ['statusField', 'validateStatusField']
         ]);
     }
 
@@ -87,6 +89,7 @@ class Generator extends \yii\gii\Generator
             'searchModelClass' => 'Search Model Class',
             'editableFields' => 'Editable Fields',
             'dateRangeFields' => 'Date Range Fields',
+            'statusFields' => 'Status Field',
         ]);
     }
 
@@ -176,6 +179,20 @@ class Generator extends \yii\gii\Generator
             if (in_array($v, $this->generateEditableFields())) {
                 $this->addError('dateRangeFields', "can not be editable");
             }
+        }
+    }
+
+    public function validateStatusField()
+    {
+        $class = $this->modelClass;
+        $field = $this->statusField;
+        $field = trim($field);
+        $pk = $class::primaryKey();
+        if (in_array($field, $pk)) {
+            $this->addError('dateRangeFields', "primary key(s) can not be status");
+        }
+        if (!in_array($field, (new $class)->attributes())) {
+            $this->addError('dateRangeFields', "field '{$field}' not found!");
         }
     }
 

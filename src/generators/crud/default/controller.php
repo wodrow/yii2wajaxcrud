@@ -23,6 +23,7 @@ $pks = $class::primaryKey();
 $urlParams = $generator->generateUrlParams();
 $actionParams = $generator->generateActionParams();
 $actionParamComments = $generator->generateActionParamComments();
+$statusField = $generator->statusField;
 
 echo "<?php\n";
 ?>
@@ -42,6 +43,7 @@ use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
 use kartik\grid\EditableColumnAction;
+use wodrow\yii2wtools\enum\Status;
 
 /**
  * <?= $controllerClass ?> implements the CRUD actions for <?= $modelClass ?> model.
@@ -274,6 +276,10 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             case 'hard':
                 $model->delete();
                 break;
+            case 'soft':
+                $model-><?= $statusField ?> = Status::STATUS_DEL;
+                $model->save();
+                break;
             default:
                 break;
         }
@@ -310,6 +316,10 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             switch($type){
                 case 'hard':
                     $model->delete();
+                    break;
+                case 'soft':
+                    $model-><?= $statusField ?> = Status::STATUS_DEL;
+                    $model->save();
                     break;
                 default:
                     break;
