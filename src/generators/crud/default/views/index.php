@@ -16,6 +16,7 @@ $actionParams = $generator->generateActionParams();
 
 $editableFields = $generator->generateEditableFields();
 $dateRangeFields = $generator->generateDateRangeFields();
+$statusField = $generator->statusField;
 
 $urlParams = $generator->generateUrlParams();
 $nameAttribute = $generator->getNameAttribute();
@@ -36,6 +37,7 @@ use yii\helpers\Html;
 use yii\bootstrap\Modal;
 use wodrow\wajaxcrud\CrudAsset;
 use wodrow\wajaxcrud\BulkButtonWidget;
+use wodrow\yii2wtools\enum\Status;
 
 /* @var $this yii\web\View */
 <?= !empty($generator->searchModelClass) ? "/* @var \$searchModel " . ltrim($generator->searchModelClass, '\\') . " */\n" : '' ?>
@@ -116,10 +118,15 @@ CrudAsset::register($this);
                         'pjaxContainerId' => "crud-datatable-pjax",
                     ]),
                 ],
+                <?php elseif ($name == $statusField): ?>[
+                    'class' => EnumColumn::class,
+                    'attribute' => '<?=$name ?>',
+                    'enum' => Status::getStatus(),
+                ],
                 <?php else: ?>[
                     'class' => DataColumn::class,
                     'attribute' => '<?=$name ?>',
-                    ],
+                ],
                 <?php endif; ?>
                 <?php endforeach; ?>
                 [

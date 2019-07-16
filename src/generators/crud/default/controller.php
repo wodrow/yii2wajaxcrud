@@ -276,10 +276,11 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             case 'hard':
                 $model->delete();
                 break;
-            case 'soft':
+            <?php if($statusField): ?>case 'soft':
                 $model-><?= $statusField ?> = Status::STATUS_DEL;
                 $model->save();
                 break;
+            <?php endif; ?>
             default:
                 break;
         }
@@ -317,10 +318,11 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                 case 'hard':
                     $model->delete();
                     break;
-                case 'soft':
+                <?php if($statusField): ?>case 'soft':
                     $model-><?= $statusField ?> = Status::STATUS_DEL;
                     $model->save();
                     break;
+                <?php endif; ?>
                 default:
                     break;
             }
