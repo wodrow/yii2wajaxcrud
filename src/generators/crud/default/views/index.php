@@ -114,7 +114,7 @@ CrudAsset::register($this);
                             ],
                         ],
                         'useWithAddon' => true,
-                        'presetDropdown' => true,
+                        // 'presetDropdown' => true,
                         'pjaxContainerId' => "crud-datatable-pjax",
                     ]),
                 ],
