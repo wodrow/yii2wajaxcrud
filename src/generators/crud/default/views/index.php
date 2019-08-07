@@ -51,8 +51,8 @@ CrudAsset::register($this);
 ?>
 <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-index">
     <div id="ajaxCrudDatatable">
-        <?="<?="?>GridView::widget([
-            'id'=>'crud-datatable',
+        <?="<?= "?>GridView::widget([
+            'id' => 'crud-datatable',
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'responsive' => true,
@@ -64,11 +64,11 @@ CrudAsset::register($this);
             'columns' => [
                 [
                     'class' => CheckboxColumn::class,
-                    'width' => '20px',
+                    'width' => "20px",
                 ],
                 [
                     'class' => SerialColumn::class,
-                    'width' => '40px',
+                    'width' => "40px",
                     'pageSummary' => "合计",
                 ],
                 [
@@ -83,14 +83,14 @@ CrudAsset::register($this);
                 ],
                 <?php foreach ($generator->getColumnNames() as $name): ?><?php if(in_array($name, $editableFields)): ?>[
                     'class' => EditableColumn::class,
-                    'attribute' => '<?=$name ?>',
+                    'attribute' => "<?=$name ?>",
                     'readonly' => function ($model, $key, $index, $widget) {
                         return false;
                     },
                     'editableOptions' => function ($model, $key, $index, $widget) {
                         return [
-                            'header' => '修改',
-                            'size' => 'md',
+                            'header' => "修改",
+                            'size' => "md",
                             'formOptions' => ['action' => ['editable-edit']],
                         ];
                     },
@@ -98,34 +98,34 @@ CrudAsset::register($this);
                 ],
                 <?php elseif (in_array($name, $dateRangeFields)): ?>[
                     'class' => DataColumn::class,
-                    'attribute' => '<?=$name ?>',
+                    'attribute' => "<?=$name ?>",
                     'format' => ['date', 'php:Y-m-d H:i'],
                     'filter' => DateRangePicker::widget([
                         'model' => $searchModel,
-                        'attribute' => '<?=$name ?>',
+                        'attribute' => "<?=$name ?>",
                         'convertFormat' => true,
                         'pluginOptions' => [
-                            'opens' => 'left',
+                            'opens' => "left",
                             'timePicker' => true,
                             'timePickerIncrement' => 30,
                             'locale' => [
-                                'format' => 'Y-m-d H:i',
+                                'format' => "Y-m-d H:i",
                                 'cancelLabel' => "清除",
                             ],
                         ],
-                        //'useWithAddon' => true,
-                        //'presetDropdown' => true,
+//                        'useWithAddon' => true,
+//                        'presetDropdown' => true,
                         'pjaxContainerId' => "crud-datatable-pjax",
                     ]),
                 ],
                 <?php elseif ($name == $statusField): ?>[
                     'class' => EnumColumn::class,
-                    'attribute' => '<?=$name ?>',
+                    'attribute' => "<?=$name ?>",
                     'enum' => Status::getStatus(),
                 ],
                 <?php else: ?>[
                     'class' => DataColumn::class,
-                    'attribute' => '<?=$name ?>',
+                    'attribute' => "<?=$name ?>",
                 ],
                 <?php endif; ?>
                 <?php endforeach; ?>
@@ -134,54 +134,56 @@ CrudAsset::register($this);
                     'dropdown' => false,
                     'vAlign'=>'middle',
                     'urlCreator' => function($action, $model, $key, $index) {
-                        return Url::to([$action,'<?=substr($actionParams,1)?>'=>$key, 'type' => "soft"]);
+                        return Url::to([$action,'<?=substr($actionParams,1)?>' => $key, 'type' => "soft"]);
                     },
-                    'viewOptions'=>['role'=>'modal-remote','title'=>'View','data-toggle'=>'tooltip'],
-                    'updateOptions'=>['role'=>'modal-remote','title'=>'Update', 'data-toggle'=>'tooltip'],
-                    'deleteOptions'=>[
-                        'role'=>'modal-remote','title'=>'Delete',
-                        'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
-                        'data-request-method'=>'post',
-                        'data-toggle'=>'tooltip',
-                        'data-confirm-title'=>'删除数据提示!',
-                        'data-confirm-message'=>'你确认要删除本条数据吗?'
+                    'viewOptions' => ['role' => "modal-remote", 'title' => "View",'data-toggle' => "tooltip"],
+                    'updateOptions' => ['role' => 'modal-remote', 'title' => "Update", 'data-toggle' => "tooltip"],
+                    'deleteOptions' => [
+                        'role' => 'modal-remote',
+                        'title' => "Delete",
+                        'data-confirm' => false,
+                        'data-method' => false, // for overide yii data api
+                        'data-request-method' => "post",
+                        'data-toggle' => "tooltip",
+                        'data-confirm-title' => "删除数据提示!",
+                        'data-confirm-message' => "你确认要删除本条数据吗?",
                     ],
                 ],
             ],
             'toolbar'=> [
                 ['content'=>
                     Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'],
-                    ['role'=>'modal-remote','title'=> 'Create new <?= Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass))) ?>','class'=>'btn btn-default']).
+                    ['role' => "modal-remote", 'title' => "Create new <?= Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass))) ?>", 'class' => "btn btn-default"]).
                     Html::a('<i class="glyphicon glyphicon-repeat"></i>', [''],
-                    ['data-pjax'=>1, 'class'=>'btn btn-default', 'title'=>'Reset Grid']).
+                    ['data-pjax' => 1, 'class' => "btn btn-default", 'title' => "Reset Grid"]).
                     '{toggleData}'.
                     '{export}'
                 ],
             ],
             'panel' => [
-                'type' => 'primary', 
-                'heading' => '<i class="glyphicon glyphicon-list"></i> <?= Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass))) ?> listing',
-                'before'=>'<em>* 你可以拖动改变单列的宽度；筛选框输入<code><?=\Yii::t('yii', '(not set)')?></code>会只搜索值为空的数据；筛选框输入<code>'.$searchModel::EMPTY_STRING.'</code>会只搜索值为空字符的数据。</em>',
+                'type' => "primary", 
+                'heading' => "<i class=\"glyphicon glyphicon-list\"></i> <?= Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass))) ?> 列表",
+                'before' => "<em>* 你可以拖动改变单列的宽度；筛选框输入<code>" . \Yii::t('yii', '(not set)'). "</code>会只搜索值为空的数据；筛选框输入<code>" . $searchModel::EMPTY_STRING . "</code>会只搜索值为空字符的数据；筛选框输入<code>" . $searchModel::NO_EMPTY . "</code>会只搜索非空数据。</em>",
                 'after'=>BulkButtonWidget::widget([
-                            'buttons'=>Html::a('<i class="glyphicon glyphicon-trash"></i>&nbsp; 删除选择',
+                            'buttons' => Html::a('<i class="glyphicon glyphicon-trash"></i> 删除选择',
                                 ["bulkdelete", 'type' => "soft"] ,
                                 [
-                                    "class"=>"btn btn-danger btn-xs",
-                                    'role'=>'modal-remote-bulk',
-                                    'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
-                                    'data-request-method'=>'post',
-                                    'data-confirm-title'=>'删除数据提示!',
-                                    'data-confirm-message'=>'你确认要删除这些数据吗?'
+                                    "class" => "btn btn-danger btn-xs",
+                                    'role' => "modal-remote-bulk",
+                                    'data-confirm' => false, 'data-method' => false,// for overide yii data api
+                                    'data-request-method' => "post",
+                                    'data-confirm-title' => "删除数据提示!",
+                                    'data-confirm-message' => "你确认要删除这些数据吗?"
                                 ]),
                         ]).                        
                         '<div class="clearfix"></div>',
             ]
-        ])<?="?>\n"?>
+        ])<?=" ?>\n"?>
     </div>
 </div>
 <?='<?php Modal::begin([
-    "id"=>"ajaxCrudModal",
-    "footer"=>"",// always need it for jquery plugin
-])?>'."\n"?>
+    \'id\' => "ajaxCrudModal",
+    \'footer\' => "", // always need it for jquery plugin
+]); ?>'."\n"?>
 <?='<?php Modal::end(); ?>'?>
 

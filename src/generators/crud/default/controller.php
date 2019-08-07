@@ -281,7 +281,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                 $model->save();
                 break;
             <?php endif; ?>
-            default:
+default:
                 break;
         }
 
@@ -323,7 +323,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                     $model->save();
                     break;
                 <?php endif; ?>
-                default:
+default:
                     break;
             }
         }

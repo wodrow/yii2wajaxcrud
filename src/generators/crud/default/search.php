@@ -42,7 +42,8 @@ use <?= ltrim($generator->modelClass, '\\') . (isset($modelAlias) ? " as $modelA
 class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $modelClass ?>
 
 {
-    const EMPTY_STRING = "空字符";
+    const EMPTY_STRING = "(空字符)";
+    const NO_EMPTY = "(非空)";
     const SCENARIO_EDITABLE = 'editable';
 
     public function scenarios()
@@ -94,6 +95,9 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
                 break;
             case self::EMPTY_STRING:
                 $query->andWhere([$attribute=>'']);
+                break;
+            case self::NO_EMPTY:
+                $query->andWhere(['IS NOT', $attribute, new Expression('NULL')])->andWhere(['<>', $attribute, '']);
                 break;
             default:
                 $query->andFilterWhere(['like', $attribute, $this->$attribute]);
