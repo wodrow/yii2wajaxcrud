@@ -34,7 +34,7 @@
     "kartik-v/yii2-mpdf": "^1.0",
     "kartik-v/yii2-editable": "^1.7",
     "kartik-v/yii2-widget-activeform": "^1.5",
-    "wodrow/yii2wtools": "^0.1"
+    "wodrow/yii2wtools": "^0.1.15"
   },
   "autoload": {
     "psr-4": {
