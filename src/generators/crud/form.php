@@ -11,6 +11,7 @@ echo $form->field($generator, 'viewPath');
 echo $form->field($generator, 'baseControllerClass');
 echo $form->field($generator, 'editableFields');
 echo $form->field($generator, 'dateRangeFields');
+echo $form->field($generator, 'thumbImageFields');
 echo $form->field($generator, 'statusField');
 echo $form->field($generator, 'enableI18N')->checkbox();
 echo $form->field($generator, 'messageCategory');

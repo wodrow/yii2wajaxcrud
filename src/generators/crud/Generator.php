@@ -32,6 +32,7 @@ class Generator extends \yii\gii\Generator
     public $searchModelClass = '';
     public $editableFields;
     public $dateRangeFields;
+    public $thumbImageFields;
     public $statusField = 'status';
 
     /**
@@ -72,6 +73,7 @@ class Generator extends \yii\gii\Generator
             ['viewPath', 'safe'],
             ['editableFields', 'validateEditableFields'],
             ['dateRangeFields', 'validateDateRangeFields'],
+            ['thumbImageFields', 'validateThumbImageFields'],
             ['statusField', 'validateStatusField']
         ]);
     }
@@ -89,6 +91,7 @@ class Generator extends \yii\gii\Generator
             'searchModelClass' => 'Search Model Class',
             'editableFields' => 'Editable Fields',
             'dateRangeFields' => 'Date Range Fields',
+            'thumbIamgeFields' => 'Thumb Image Fields',
             'statusFields' => 'Status Field',
         ]);
     }
@@ -145,6 +148,20 @@ class Generator extends \yii\gii\Generator
         }
     }
 
+    public function validateStatusField()
+    {
+        $class = $this->modelClass;
+        $field = $this->statusField;
+        $field = trim($field);
+        $pk = $class::primaryKey();
+        if (in_array($field, $pk)) {
+            $this->addError('dateRangeFields', "primary key(s) can not be status");
+        }
+        if (!in_array($field, (new $class)->attributes())) {
+            $this->addError('dateRangeFields', "field '{$field}' not found!");
+        }
+    }
+
     public function validateEditableFields()
     {
         $class = $this->modelClass;
@@ -158,6 +175,9 @@ class Generator extends \yii\gii\Generator
             }
             if (!in_array($v, (new $class)->attributes())) {
                 $this->addError('editableFields', "field '{$v}' not found!");
+            }
+            if (!$this->checkResuing()){
+                $this->addError('editableFields', "can not be editable");
             }
         }
     }
@@ -176,23 +196,45 @@ class Generator extends \yii\gii\Generator
             if (!in_array($v, (new $class)->attributes())) {
                 $this->addError('dateRangeFields', "field '{$v}' not found!");
             }
-            if (in_array($v, $this->generateEditableFields())) {
-                $this->addError('dateRangeFields', "can not be editable");
+            if (!$this->checkResuing()) {
+                $this->addError('dateRangeFields', "can not be date range");
             }
         }
     }
 
-    public function validateStatusField()
+    public function validateThumbImageFields()
     {
         $class = $this->modelClass;
-        $field = $this->statusField;
-        $field = trim($field);
+        $fields = explode(',', $this->thumbImageFields);
         $pk = $class::primaryKey();
-        if (in_array($field, $pk)) {
-            $this->addError('dateRangeFields', "primary key(s) can not be status");
+        foreach ($fields as $k => $v) {
+            if (!$v)continue;
+            $v = trim($v);
+            if (in_array($v, $pk)) {
+                $this->addError('thumbImageFields', "primary key(s) can not be thumb image");
+            }
+            if (!in_array($v, (new $class)->attributes())) {
+                $this->addError('thumbImageFields', "field '{$v}' not found!");
+            }
+            if (!$this->checkResuing()) {
+                $this->addError('thumbImageFields', "can not be thumb image");
+            }
         }
-        if (!in_array($field, (new $class)->attributes())) {
-            $this->addError('dateRangeFields', "field '{$field}' not found!");
+    }
+
+    public function checkResuing()
+    {
+        $a = $this->generateDateRangeFields();
+        $b = $this->generateEditableFields();
+        $c = $this->generateThumbImageFields();
+        $d = $this->statusField?[$this->statusField]:[];
+        $x = $a + $b + $c + $d;
+        $t1 = count($a) + count($b) + count($c) + count($d);
+        $t2 = count($x);
+        if ($t1 > $t2){
+            return false;
+        }else{
+            return true;
         }
     }
 
@@ -276,6 +318,17 @@ class Generator extends \yii\gii\Generator
     public function generateDateRangeFields()
     {
         $fields = explode(',', $this->dateRangeFields);
+        foreach ($fields as $k => $v) {
+            if (!$v){
+                unset($fields[$k]);
+            }
+        }
+        return $fields;
+    }
+
+    public function generateThumbImageFields()
+    {
+        $fields = explode(',', $this->thumbImageFields);
         foreach ($fields as $k => $v) {
             if (!$v){
                 unset($fields[$k]);

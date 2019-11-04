@@ -17,6 +17,7 @@ if ($modelClass === $searchModelClass) {
 $rules = $generator->generateSearchRules();
 $labels = $generator->generateSearchLabels();
 $editableFields = $generator->generateEditableFields();
+$thumbImageFields = $generator->generateThumbImageFields();
 foreach ($editableFields as $k => $v) {
     $editableFields[$k] = "'{$v}'";
 }

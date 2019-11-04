@@ -16,6 +16,7 @@ $actionParams = $generator->generateActionParams();
 
 $editableFields = $generator->generateEditableFields();
 $dateRangeFields = $generator->generateDateRangeFields();
+$thumbImageFields = $generator->generateThumbImageFields();
 $statusField = $generator->statusField;
 
 $urlParams = $generator->generateUrlParams();
@@ -38,6 +39,7 @@ use yii\bootstrap\Modal;
 use wodrow\wajaxcrud\CrudAsset;
 use wodrow\wajaxcrud\BulkButtonWidget;
 use wodrow\yii2wtools\enum\Status;
+use wodrow\yii2wtools\tools\JsBlock;
 
 /* @var $this yii\web\View */
 <?= !empty($generator->searchModelClass) ? "/* @var \$searchModel " . ltrim($generator->searchModelClass, '\\') . " */\n" : '' ?>
@@ -53,6 +55,9 @@ CrudAsset::register($this);
     <div id="ajaxCrudDatatable">
         <?="<?= "?>GridView::widget([
             'id' => 'crud-datatable',
+            'rowOptions' => [
+                'class' => 'gvRowBaguetteBox',
+            ],
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'responsive' => true,
@@ -118,6 +123,16 @@ CrudAsset::register($this);
                         'pjaxContainerId' => "crud-datatable-pjax",
                     ]),
                 ],
+                <?php elseif (in_array($name, $thumbImageFields)): ?>[
+                    'class' => DataColumn::class,
+                    'attribute' => "<?=$name ?>",
+                    'mergeHeader' => true,
+                    'enableSorting' => false,
+                    'format' => 'raw',
+                    'value' => function ($m) {
+                        return Html::a(Html::img($m-><?=$name ?>, ['alt' => '缩略图', 'width' => 120]), $m-><?=$name ?>);
+                    },
+                ],
                 <?php elseif ($name == $statusField): ?>[
                     'class' => EnumColumn::class,
                     'attribute' => "<?=$name ?>",
@@ -127,9 +142,7 @@ CrudAsset::register($this);
                     'class' => DataColumn::class,
                     'attribute' => "<?=$name ?>",
                 ],
-                <?php endif; ?>
-                <?php endforeach; ?>
-                [
+                <?php endif; ?><?php endforeach; ?>[
                     'class' => ActionColumn::class,
                     'dropdown' => false,
                     'vAlign'=>'middle',
@@ -165,18 +178,16 @@ CrudAsset::register($this);
                 'heading' => "<i class=\"glyphicon glyphicon-list\"></i> <?= Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass))) ?> 列表",
                 'before' => "<em>* 你可以拖动改变单列的宽度；筛选框输入<code>" . \Yii::t('yii', '(not set)'). "</code>会只搜索值为空的数据；筛选框输入<code>" . $searchModel::EMPTY_STRING . "</code>会只搜索值为空字符的数据；筛选框输入<code>" . $searchModel::NO_EMPTY . "</code>会只搜索非空数据。</em>",
                 'after'=>BulkButtonWidget::widget([
-                            'buttons' => Html::a('<i class="glyphicon glyphicon-trash"></i> 删除选择',
-                                ["bulkdelete", 'type' => "soft"] ,
-                                [
-                                    "class" => "btn btn-danger btn-xs",
-                                    'role' => "modal-remote-bulk",
-                                    'data-confirm' => false, 'data-method' => false,// for overide yii data api
-                                    'data-request-method' => "post",
-                                    'data-confirm-title' => "删除数据提示!",
-                                    'data-confirm-message' => "你确认要删除这些数据吗?"
-                                ]),
-                        ]).                        
-                        '<div class="clearfix"></div>',
+                    'buttons' => Html::a('<i class="glyphicon glyphicon-trash"></i> 删除选择', ["bulkdelete", 'type' => "soft"], [
+                        "class" => "btn btn-danger btn-xs",
+                        'role' => "modal-remote-bulk",
+                        'data-confirm' => false, 'data-method' => false,// for overide yii data api
+                        'data-request-method' => "post",
+                        'data-confirm-title' => "删除数据提示!",
+                        'data-confirm-message' => "你确认要删除这些数据吗?"
+                    ]),
+                ]).
+                '<div class="clearfix"></div>',
             ]
         ])<?=" ?>\n"?>
     </div>
@@ -186,4 +197,19 @@ CrudAsset::register($this);
     \'footer\' => "", // always need it for jquery plugin
 ]); ?>'."\n"?>
 <?='<?php Modal::end(); ?>'?>
+
+
+<?='<?php JsBlock::begin(); ?>' ?>
+
+<?='<script>' ?>
+
+<?='$(function () {
+    baguetteBox.run(".gvRowBaguetteBox", {
+        animation: "fadeIn"
+    });
+})' ?>
+
+<?='</script>' ?>
+
+<?='<?php JsBlock::end(); ?>' ?>
 

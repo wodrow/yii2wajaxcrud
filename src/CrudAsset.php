@@ -17,7 +17,14 @@ class CrudAsset extends AssetBundle
 //    ];
 
     public $css = [
-        'ajaxcrud.css'
+        'ajaxcrud.css',
+        'baguetteBox.min.css',
+    ];
+
+    public $js = [
+        YII_ENV_DEV?'ModalRemote.min.js':'ModalRemote.js',
+        YII_ENV_DEV?'ajaxcrud.min.js':'ajaxcrud.js',
+        'baguetteBox.min.js',
     ];
 
     public $depends = [
@@ -26,17 +33,4 @@ class CrudAsset extends AssetBundle
         'yii\bootstrap\BootstrapPluginAsset',
         'kartik\grid\GridViewAsset',
     ];
-    
-   public function init() {
-       // In dev mode use non-minified javascripts
-       $this->js = YII_DEBUG ? [
-           'ModalRemote.js',
-           'ajaxcrud.js',
-       ]:[
-           'ModalRemote.min.js',
-           'ajaxcrud.min.js',
-       ];
-
-       parent::init();
-   }
 }
