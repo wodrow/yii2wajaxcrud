@@ -89,6 +89,8 @@ CrudAsset::register($this);
                 <?php foreach ($generator->getColumnNames() as $name): ?><?php if(in_array($name, $editableFields)): ?>[
                     'class' => EditableColumn::class,
                     'attribute' => "<?=$name ?>",
+                    'hAlign' => GridView::ALIGN_CENTER,
+                    'vAlign' => GridView::ALIGN_MIDDLE,
                     'readonly' => function ($model, $key, $index, $widget) {
                         return false;
                     },
@@ -104,6 +106,8 @@ CrudAsset::register($this);
                 <?php elseif (in_array($name, $dateRangeFields)): ?>[
                     'class' => DataColumn::class,
                     'attribute' => "<?=$name ?>",
+                    'hAlign' => GridView::ALIGN_CENTER,
+                    'vAlign' => GridView::ALIGN_MIDDLE,
                     'format' => ['date', 'php:Y-m-d H:i'],
                     'filter' => DateRangePicker::widget([
                         'model' => $searchModel,
@@ -126,6 +130,8 @@ CrudAsset::register($this);
                 <?php elseif (in_array($name, $thumbImageFields)): ?>[
                     'class' => DataColumn::class,
                     'attribute' => "<?=$name ?>",
+                    'hAlign' => GridView::ALIGN_CENTER,
+                    'vAlign' => GridView::ALIGN_MIDDLE,
                     'mergeHeader' => true,
                     'enableSorting' => false,
                     'format' => 'raw',
@@ -136,16 +142,21 @@ CrudAsset::register($this);
                 <?php elseif ($name == $statusField): ?>[
                     'class' => EnumColumn::class,
                     'attribute' => "<?=$name ?>",
+                    'hAlign' => GridView::ALIGN_CENTER,
+                    'vAlign' => GridView::ALIGN_MIDDLE,
                     'enum' => Status::getStatus(),
                 ],
                 <?php else: ?>[
                     'class' => DataColumn::class,
                     'attribute' => "<?=$name ?>",
+                    'hAlign' => GridView::ALIGN_CENTER,
+                    'vAlign' => GridView::ALIGN_MIDDLE,
                 ],
                 <?php endif; ?><?php endforeach; ?>[
                     'class' => ActionColumn::class,
                     'dropdown' => false,
-                    'vAlign' => 'middle',
+                    'hAlign' => GridView::ALIGN_CENTER,
+                    'vAlign' => GridView::ALIGN_MIDDLE,
                     'urlCreator' => function($action, $model, $key, $index) {
                         return Url::to([$action,'<?=substr($actionParams,1)?>' => $key, 'type' => "soft"]);
                     },
