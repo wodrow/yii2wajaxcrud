@@ -335,7 +335,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                     Html::button('Close', ['class' => 'btn btn-default pull-left','data-dismiss' => "modal"]).
                     Html::button('test', ['class' => 'btn btn-primary', 'type' => "submit"]),
                 ];
-            }elseif($model->load($request->post())){
+            }elseif($model->load($request->post()) && $model->validate()){
                 # TO DO test
                 return ['forceClose' => true,'forceReload' => '#crud-datatable-pjax'];
             }else{
