@@ -162,6 +162,20 @@ CrudAsset::register($this);
                         'data-confirm-message' => "你确认要删除本条数据吗?",
                     ],
                 ],
+                [
+                    'class' => DataColumn::class,
+                    'label' => '更多操作',
+                    'format' => 'raw',
+                    'mergeHeader' => true,
+                    'value' => function ($m) {
+                        return Html::a('操作名test', ['test', 'id' => $m->id], [
+                            'title' => 'title',
+                            'role' => 'modal-remote',
+                            'data-toggle' => 'tooltip',
+                        ]);
+                    },
+                    'contentOptions' => ['style' => 'vertical-align: middle;'],
+                ],
             ],
             'toolbar'=> [
                 ['content'=>

@@ -76,7 +76,9 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
         <?= implode("        ", $searchConditions) ?>
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-        ]);
+            <?php if($generator->isDesc): ?>'sort' => ['defaultOrder' => ['id' => SORT_DESC]],
+            <?php else: ?>'sort' => ['defaultOrder' => ['id' => SORT_ASC]],
+        <?php endif; ?>]);
         if (!$this->validate()) {
             return $dataProvider;
         }

@@ -33,6 +33,7 @@ class Generator extends \yii\gii\Generator
     public $editableFields;
     public $dateRangeFields;
     public $thumbImageFields;
+    public $isDesc = true;
     public $statusField = 'status';
 
     /**
@@ -58,7 +59,7 @@ class Generator extends \yii\gii\Generator
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['controllerClass', 'modelClass', 'searchModelClass', 'baseControllerClass'], 'filter', 'filter' => 'trim'],
+            [['controllerClass', 'modelClass', 'searchModelClass', 'baseControllerClass', 'viewPath', 'editableFields', 'dateRangeFields', 'thumbImageFields', 'statusField'], 'filter', 'filter' => 'trim'],
             [['modelClass', 'controllerClass', 'baseControllerClass'], 'required'],
             [['searchModelClass'], 'compare', 'compareAttribute' => 'modelClass', 'operator' => '!==', 'message' => 'Search Model Class must not be equal to Model Class.'],
             [['modelClass', 'controllerClass', 'baseControllerClass', 'searchModelClass'], 'match', 'pattern' => '/^[\w\\\\]*$/', 'message' => 'Only word characters and backslashes are allowed.'],
@@ -69,12 +70,13 @@ class Generator extends \yii\gii\Generator
             [['controllerClass', 'searchModelClass'], 'validateNewClass'],
             [['modelClass'], 'validateModelClass'],
             [['enableI18N'], 'boolean'],
+            [['isDesc'], 'boolean'],
             [['messageCategory'], 'validateMessageCategory', 'skipOnEmpty' => false],
             ['viewPath', 'safe'],
             ['editableFields', 'validateEditableFields'],
             ['dateRangeFields', 'validateDateRangeFields'],
             ['thumbImageFields', 'validateThumbImageFields'],
-            ['statusField', 'validateStatusField']
+            ['statusField', 'validateStatusField'],
         ]);
     }
 
@@ -228,7 +230,7 @@ class Generator extends \yii\gii\Generator
         $b = $this->generateEditableFields();
         $c = $this->generateThumbImageFields();
         $d = $this->statusField?[$this->statusField]:[];
-        $x = $a + $b + $c + $d;
+        $x = array_merge(array_merge(array_merge($a, $b), $c), $d);
         $t1 = count($a) + count($b) + count($c) + count($d);
         $t2 = count($x);
         if ($t1 > $t2){

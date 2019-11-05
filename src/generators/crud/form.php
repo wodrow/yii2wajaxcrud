@@ -14,4 +14,5 @@ echo $form->field($generator, 'dateRangeFields');
 echo $form->field($generator, 'thumbImageFields');
 echo $form->field($generator, 'statusField');
 echo $form->field($generator, 'enableI18N')->checkbox();
+echo $form->field($generator, 'isDesc')->checkbox();
 echo $form->field($generator, 'messageCategory');
