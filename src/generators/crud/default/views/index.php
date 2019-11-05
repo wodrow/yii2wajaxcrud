@@ -145,7 +145,7 @@ CrudAsset::register($this);
                 <?php endif; ?><?php endforeach; ?>[
                     'class' => ActionColumn::class,
                     'dropdown' => false,
-                    'vAlign'=>'middle',
+                    'vAlign' => 'middle',
                     'urlCreator' => function($action, $model, $key, $index) {
                         return Url::to([$action,'<?=substr($actionParams,1)?>' => $key, 'type' => "soft"]);
                     },
@@ -177,8 +177,8 @@ CrudAsset::register($this);
                     'contentOptions' => ['style' => 'vertical-align: middle;'],
                 ],
             ],
-            'toolbar'=> [
-                ['content'=>
+            'toolbar' => [
+                ['content' =>
                     Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'],
                     ['role' => "modal-remote", 'title' => "Create new <?= Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass))) ?>", 'class' => "btn btn-default"]).
                     Html::a('<i class="glyphicon glyphicon-repeat"></i>', [''],
@@ -191,7 +191,7 @@ CrudAsset::register($this);
                 'type' => "primary", 
                 'heading' => "<i class=\"glyphicon glyphicon-list\"></i> <?= Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass))) ?> 列表",
                 'before' => "<em>* 你可以拖动改变单列的宽度；筛选框输入<code>" . \Yii::t('yii', '(not set)'). "</code>会只搜索值为空的数据；筛选框输入<code>" . $searchModel::EMPTY_STRING . "</code>会只搜索值为空字符的数据；筛选框输入<code>" . $searchModel::NO_EMPTY . "</code>会只搜索非空数据。</em>",
-                'after'=>BulkButtonWidget::widget([
+                'after' => BulkButtonWidget::widget([
                     'buttons' => Html::a('<i class="glyphicon glyphicon-trash"></i> 删除选择', ["bulkdelete", 'type' => "soft"], [
                         "class" => "btn btn-danger btn-xs",
                         'role' => "modal-remote-bulk",

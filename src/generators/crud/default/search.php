@@ -97,7 +97,7 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
                 $query->andFilterWhere(['IS', $attribute, new Expression('NULL')]);
                 break;
             case self::EMPTY_STRING:
-                $query->andWhere([$attribute=>'']);
+                $query->andWhere([$attribute => '']);
                 break;
             case self::NO_EMPTY:
                 $query->andWhere(['IS NOT', $attribute, new Expression('NULL')])->andWhere(['<>', $attribute, '']);
