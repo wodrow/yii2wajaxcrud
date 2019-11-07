@@ -438,7 +438,7 @@ class Generator extends \yii\gii\Generator
                 $types['match']['pattern'] = '/^.+\s\-\s.+$/';
             }else{
                 switch ($column->type) {
-                    case Schema::TYPE_SMALLINT:
+                    /*case Schema::TYPE_SMALLINT:
                     case Schema::TYPE_INTEGER:
                     case Schema::TYPE_BIGINT:
                         $types['integer']['columns'][] = $column->name;
@@ -455,7 +455,7 @@ class Generator extends \yii\gii\Generator
                     case Schema::TYPE_DATE:
                     case Schema::TYPE_TIME:
                     case Schema::TYPE_DATETIME:
-                    case Schema::TYPE_TIMESTAMP:
+                    case Schema::TYPE_TIMESTAMP:*/
                     default:
                         $types['safe']['columns'][] = $column->name;
                         break;
@@ -557,10 +557,11 @@ HTML;
                     case Schema::TYPE_TIME:
                     case Schema::TYPE_DATETIME:
                     case Schema::TYPE_TIMESTAMP:
-                        $hashConditions[] = "'{$column}' => \$this->{$column},";
+//                        $hashConditions[] = "'{$column}' => \$this->{$column},";
+                        $likeConditions[] = "\$this->fieldFilter(\$query, '{$column}', '{$column}', '=');";
                         break;
                     default:
-                        $likeConditions[] = "\$this->fieldFilterLike(\$query, '{$column}', '{$column}');";
+                        $likeConditions[] = "\$this->fieldFilter(\$query, '{$column}', '{$column}', 'like');";
                         break;
                 }
             }

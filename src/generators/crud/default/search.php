@@ -89,7 +89,7 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
     * @param ActiveQuery $query
     * @param $attribute
     */
-    protected function fieldFilterLike(&$query, $field, $attribute)
+    protected function fieldFilter(&$query, $field, $attribute, $filter_type)
     {
         $this->$attribute = trim($this->$attribute);
         switch($this->$attribute){
@@ -103,7 +103,7 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
                 $query->andWhere(['IS NOT', $field, new Expression('NULL')])->andWhere(['<>', $field, '']);
                 break;
             default:
-                $query->andFilterWhere(['like', $field, $this->$attribute]);
+                $query->andFilterWhere([$filter_type, $field, $this->$attribute]);
                 break;
         }
     }
