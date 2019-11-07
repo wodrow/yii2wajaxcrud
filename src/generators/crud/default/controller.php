@@ -43,7 +43,6 @@ use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
 use kartik\grid\EditableColumnAction;
-use wodrow\yii2wtools\enum\Status;
 
 /**
  * <?= $controllerClass ?> implements the CRUD actions for <?= $modelClass ?> model.
@@ -269,7 +268,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                 $model->delete();
                 break;
             <?php if($statusField): ?>case 'soft':
-                $model-><?= $statusField ?> = Status::STATUS_DEL;
+                # TO DO soft delete
                 $model->save();
                 break;
             <?php endif; ?>default:
@@ -302,7 +301,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                     $model->delete();
                     break;
                 <?php if($statusField): ?>case 'soft':
-                    $model-><?= $statusField ?> = Status::STATUS_DEL;
+                    # TO DO soft delete
                     $model->save();
                     break;
                 <?php endif; ?>default:

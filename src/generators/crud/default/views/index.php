@@ -38,7 +38,6 @@ use yii\helpers\Html;
 use yii\bootstrap\Modal;
 use wodrow\wajaxcrud\CrudAsset;
 use wodrow\wajaxcrud\BulkButtonWidget;
-use wodrow\yii2wtools\enum\Status;
 use wodrow\yii2wtools\tools\JsBlock;
 
 /* @var $this yii\web\View */
@@ -144,7 +143,7 @@ CrudAsset::register($this);
                     'attribute' => "<?=$name ?>",
                     'hAlign' => GridView::ALIGN_CENTER,
                     'vAlign' => GridView::ALIGN_MIDDLE,
-                    'enum' => Status::getStatus(),
+                    'enum' => [],
                 ],
                 <?php else: ?>[
                     'class' => DataColumn::class,
