@@ -543,7 +543,6 @@ if ( ! is_null(\$this->{$column}) && strpos(\$this->{$column}, ' - ') !== false 
             \$query->andFilterWhere(['between', '{$column}', strtotime(\$s), strtotime(\$e)]);
         }\n
 HTML;
-
             }else{
                 switch ($type) {
                     case Schema::TYPE_SMALLINT:
@@ -561,7 +560,7 @@ HTML;
                         $hashConditions[] = "'{$column}' => \$this->{$column},";
                         break;
                     default:
-                        $likeConditions[] = "\$this->filterLike(\$query, '{$column}');";
+                        $likeConditions[] = "\$this->fieldFilterLike(\$query, '{$column}', '{$column}');";
                         break;
                 }
             }

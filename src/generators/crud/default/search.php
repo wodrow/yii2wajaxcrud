@@ -86,24 +86,24 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
     }
 
     /**
-     * @param ActiveQuery $query
-     * @param $attribute
-     */
-    protected function filterLike(&$query, $attribute)
+    * @param ActiveQuery $query
+    * @param $attribute
+    */
+    protected function fieldFilterLike(&$query, $field, $attribute)
     {
         $this->$attribute = trim($this->$attribute);
         switch($this->$attribute){
             case \Yii::t('yii', '(not set)'):
-                $query->andFilterWhere(['IS', $attribute, new Expression('NULL')]);
+                $query->andFilterWhere(['IS', $field, new Expression('NULL')]);
                 break;
             case self::EMPTY_STRING:
-                $query->andWhere([$attribute => '']);
+                $query->andWhere([$field => '']);
                 break;
             case self::NO_EMPTY:
-                $query->andWhere(['IS NOT', $attribute, new Expression('NULL')])->andWhere(['<>', $attribute, '']);
+                $query->andWhere(['IS NOT', $field, new Expression('NULL')])->andWhere(['<>', $field, '']);
                 break;
             default:
-                $query->andFilterWhere(['like', $attribute, $this->$attribute]);
+                $query->andFilterWhere(['like', $field, $this->$attribute]);
                 break;
         }
     }
