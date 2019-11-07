@@ -24,17 +24,18 @@
     "source": "https://github.com/wodrow/yii2wajaxcrud"
   },
   "require": {
-    "yiisoft/yii2": "^2.0.17",
-    "yiisoft/yii2-gii": "^2.1",
-    "yiisoft/yii2-bootstrap": "^2.0",
-    "kartik-v/yii2-krajee-base": "^2.0",
-    "kartik-v/yii2-grid": "^3.3",
-    "kartik-v/yii2-detail-view": "^1.8",
-    "kartik-v/yii2-date-range": "^1.7",
-    "kartik-v/yii2-mpdf": "^1.0",
-    "kartik-v/yii2-editable": "^1.7",
-    "kartik-v/yii2-widget-activeform": "^1.5",
-    "wodrow/yii2wtools": "^0.1.15"
+    "php": ">=7.1",
+    "yiisoft/yii2": "^2.0.28",
+    "yiisoft/yii2-gii": "^2.1.2",
+    "yiisoft/yii2-bootstrap": "^2.0.10",
+    "kartik-v/yii2-krajee-base": "^2.0.5",
+    "kartik-v/yii2-grid": "^3.3.4",
+    "kartik-v/yii2-detail-view": "^1.8.2",
+    "kartik-v/yii2-date-range": "^1.7.1",
+    "kartik-v/yii2-mpdf": "^1.0.5",
+    "kartik-v/yii2-editable": "^1.7.8",
+    "kartik-v/yii2-widget-activeform": "^1.5.8",
+    "wodrow/yii2wtools": "^0.1.18"
   },
   "autoload": {
     "psr-4": {
