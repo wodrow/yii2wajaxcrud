@@ -75,7 +75,7 @@ CrudAsset::register($this);
                     'width' => "40px",
                     'pageSummary' => "合计",
                 ],
-                [
+                /*[
                     'class' => ExpandRowColumn::class,
                     'value' => function ($model, $key, $index, $column) {
                         return GridView::ROW_COLLAPSED;
@@ -84,7 +84,7 @@ CrudAsset::register($this);
                         return $this->render('view', ['model' => $model]);
                     },
                     'expandOneOnly' => true,
-                ],
+                ],*/
                 <?php foreach ($generator->getColumnNames() as $name): ?><?php if(in_array($name, $editableFields)): ?>[
                     'class' => EditableColumn::class,
                     'attribute' => "<?=$name ?>",
