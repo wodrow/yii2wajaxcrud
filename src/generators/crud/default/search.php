@@ -86,10 +86,22 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
     }
 
     /**
-    * @param ActiveQuery $query
-    * @param $attribute
-    */
-    protected function fieldFilter(&$query, $field, $attribute, $filter_type)
+     * @param ActiveQuery $query
+     * @param $attribute
+     */
+    protected function _timeFilter(&$query, $field, $attribute, $filter_type)
+    {
+        if ( ! is_null($this->$attribute) && strpos($this->$attribute, ' - ') !== false ) {
+            list($s, $e) = explode(' - ', $this->$attribute);
+            $query->andFilterWhere(['between', $attribute, strtotime($s), strtotime($e)]);
+        }
+    }
+
+    /**
+     * @param ActiveQuery $query
+     * @param $attribute
+     */
+    protected function _fieldFilter(&$query, $field, $attribute, $filter_type)
     {
         $this->$attribute = trim($this->$attribute);
         switch($this->$attribute){

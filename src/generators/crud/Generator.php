@@ -537,12 +537,7 @@ class Generator extends \yii\gii\Generator
         $hashConditions = [];
         foreach ($columns as $column => $type) {
             if (in_array($column, $this->generateDateRangeFields())){
-                $conditions[] = <<<HTML
-if ( ! is_null(\$this->{$column}) && strpos(\$this->{$column}, ' - ') !== false ) {
-            list(\$s, \$e) = explode(' - ', \$this->{$column});
-            \$query->andFilterWhere(['between', '{$column}', strtotime(\$s), strtotime(\$e)]);
-        }\n
-HTML;
+                $conditions[] = "\$this->_timeFilter(\$query, '{$column}');";
             }else{
                 switch ($type) {
                     case Schema::TYPE_SMALLINT:
@@ -558,10 +553,10 @@ HTML;
                     case Schema::TYPE_DATETIME:
                     case Schema::TYPE_TIMESTAMP:
 //                        $hashConditions[] = "'{$column}' => \$this->{$column},";
-                        $likeConditions[] = "\$this->fieldFilter(\$query, '{$column}', '{$column}', '=');";
+                        $likeConditions[] = "\$this->_fieldFilter(\$query, '{$column}', '{$column}', '=');";
                         break;
                     default:
-                        $likeConditions[] = "\$this->fieldFilter(\$query, '{$column}', '{$column}', 'like');";
+                        $likeConditions[] = "\$this->_fieldFilter(\$query, '{$column}', '{$column}', 'like');";
                         break;
                 }
             }
