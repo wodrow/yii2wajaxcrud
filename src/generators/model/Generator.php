@@ -82,7 +82,6 @@ class Generator extends \yii\gii\generators\model\Generator
         $relations = $this->generateRelations();
         $db = $this->getDbConnection();
         foreach ($this->getTableNames() as $tableName) {
-            // BaseModel :
             $modelClassName = $this->generateClassName($tableName);
             $queryClassName = ($this->generateQuery) ? $this->generateQueryClassName($modelClassName) : false;
             $tableSchema = $db->getTableSchema($tableName);
@@ -96,24 +95,12 @@ class Generator extends \yii\gii\generators\model\Generator
                 'rules' => $this->generateRules($tableSchema),
                 'relations' => isset($relations[$tableName]) ? $relations[$tableName] : [],
             ];
+            // BaseModel :
             $files[] = new CodeFile(
                 \Yii::getAlias('@' . str_replace('\\', '/', $this->baseNs)) . '/' . $modelClassName . '.php',
                 $this->render('baseModel.php', $params)
             );
             // Model :
-            $modelClassName = $this->generateClassName($tableName);
-            $queryClassName = ($this->generateQuery) ? $this->generateQueryClassName($modelClassName) : false;
-            $tableSchema = $db->getTableSchema($tableName);
-            $params = [
-                'tableName' => $tableName,
-                'className' => $modelClassName,
-                'queryClassName' => $queryClassName,
-                'tableSchema' => $tableSchema,
-                'properties' => $this->generateProperties($tableSchema),
-                'labels' => $this->generateLabels($tableSchema),
-                'rules' => $this->generateRules($tableSchema),
-                'relations' => isset($relations[$tableName]) ? $relations[$tableName] : [],
-            ];
             $this->extendModelClass = $this->baseNs.'\\'.$this->baseModelClass;
             $files[] = new CodeFile(
                 \Yii::getAlias('@' . str_replace('\\', '/', $this->ns)) . '/' . $modelClassName . '.php',

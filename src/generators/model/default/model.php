@@ -14,6 +14,12 @@
 /* @var $rules string[] list of validation rules */
 /* @var $relations array list of relations (name => relation declaration) */
 
+$trims = "[[";
+foreach ($tableSchema->columns as $k => $column){
+    $trims .= "'{$column->name}', ";
+}
+$trims .= "], 'trim']\n";
+
 echo "<?php\n";
 ?>
 
@@ -66,7 +72,9 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->extendModelClass, '
                 $rules[$k][0] = array_diff($rules[$k][0], ['created_at', 'updated_at', 'created_by', 'updated_by']);
             }
         }*/
-        return ArrayHelper::merge($rules, []);
+        return ArrayHelper::merge($rules, [
+            <?=$trims ?>
+        ]);
     }
 
     /**
