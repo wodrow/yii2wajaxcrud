@@ -24,6 +24,23 @@ foreach ($editableFields as $k => $v) {
 $searchAttributes = $generator->getSearchAttributes();
 $searchConditions = $generator->generateSearchConditions();
 
+$pks = $generator->modelClass::primaryKey();
+if ($generator->isDesc){
+    $defaultSort = "SORT_DESC";
+}else{
+    $defaultSort = "SORT_ASC";
+}
+if (count($pks) === 1) {
+    $pk = $pks[0];
+    $defaultOrder = "['$pk' => $defaultSort, ]";
+} else {
+    $defaultOrder = "[";
+    foreach ($pks as $pk) {
+        $defaultOrder .= "'$pk' => $defaultSort, ";
+    }
+    $defaultOrder .= "]";
+}
+
 echo "<?php\n";
 ?>
 
@@ -76,8 +93,8 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
         <?= implode("        ", $searchConditions) ?>
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            <?php if($generator->isDesc): ?>'sort' => ['defaultOrder' => ['id' => SORT_DESC]],
-            <?php else: ?>'sort' => ['defaultOrder' => ['id' => SORT_ASC]],
+            <?php if($generator->isDesc): ?>'sort' => ['defaultOrder' => <?=$defaultOrder ?>],
+            <?php else: ?>'sort' => ['defaultOrder' => <?=$defaultOrder ?>],
         <?php endif; ?>]);
         if (!$this->validate()) {
             return $dataProvider;
@@ -89,7 +106,7 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
      * @param ActiveQuery $query
      * @param $attribute
      */
-    protected function _timeFilter(&$query, $field, $attribute, $filter_type)
+    protected function _timeFilter(&$query, $attribute)
     {
         if ( ! is_null($this->$attribute) && strpos($this->$attribute, ' - ') !== false ) {
             list($s, $e) = explode(' - ', $this->$attribute);

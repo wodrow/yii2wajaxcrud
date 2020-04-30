@@ -537,7 +537,7 @@ class Generator extends \yii\gii\Generator
         $hashConditions = [];
         foreach ($columns as $column => $type) {
             if (in_array($column, $this->generateDateRangeFields())){
-                $conditions[] = "\$this->_timeFilter(\$query, '{$column}');";
+                $conditions[] = "\$this->_timeFilter(\$query, '{$column}');\n";
             }else{
                 switch ($type) {
                     case Schema::TYPE_SMALLINT:

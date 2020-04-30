@@ -22,6 +22,9 @@ $statusField = $generator->statusField;
 $urlParams = $generator->generateUrlParams();
 $nameAttribute = $generator->getNameAttribute();
 
+$pks = $generator->modelClass::primaryKey();
+$pk = $pks[0];
+
 echo "<?php\n";
 ?>
 use kartik\grid\GridView;
@@ -178,7 +181,7 @@ CrudAsset::register($this);
                     'format' => 'raw',
                     'mergeHeader' => true,
                     'value' => function ($m) {
-                        return Html::a('操作名test', ['test', 'id' => $m->id], [
+                        return Html::a('操作名test', ['test', 'id' => $m-><?=$pk ?>], [
                             'title' => 'title',
                             'role' => 'modal-remote',
                             'data-toggle' => 'tooltip',
