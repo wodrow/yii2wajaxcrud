@@ -110,7 +110,7 @@ CrudAsset::register($this);
                     'attribute' => "<?=$name ?>",
                     'hAlign' => GridView::ALIGN_CENTER,
                     'vAlign' => GridView::ALIGN_MIDDLE,
-                    'format' => ['date', 'php:Y-m-d H:i'],
+                    'format' => ['date', 'php:Y-m-d H:i:s'],
                     'filter' => DateRangePicker::widget([
                         'model' => $searchModel,
                         'attribute' => "<?=$name ?>",
@@ -123,7 +123,7 @@ CrudAsset::register($this);
                             'showDropdowns' => true,
 //                            'timePickerIncrement' => 30,
                             'locale' => [
-                                'format' => "Y-m-d H:i",
+                                'format' => "Y-m-d H:i:s",
                                 'applyLabel' => "确认",
                                 'cancelLabel' => "清除",
                                 'fromLabel' => "开始时间",
