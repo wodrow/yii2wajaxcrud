@@ -146,7 +146,7 @@ CrudAsset::register($this);
                     'attribute' => "<?=$name ?>",
                     'hAlign' => GridView::ALIGN_CENTER,
                     'vAlign' => GridView::ALIGN_MIDDLE,
-                    'enum' => [],
+                    'enum' => $searchModel->statusDesc,
                 ],
                 <?php else: ?>[
                     'class' => DataColumn::class,

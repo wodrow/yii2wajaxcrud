@@ -268,7 +268,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                 $model->delete();
                 break;
             <?php if($statusField): ?>case 'soft':
-                # TO DO soft delete
+                $model->status = <?= $modelClass ?>::STATUS_DELETE;
                 $model->save();
                 break;
             <?php endif; ?>default:
@@ -301,7 +301,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                     $model->delete();
                     break;
                 <?php if($statusField): ?>case 'soft':
-                    # TO DO soft delete
+                    $model->status = <?= $modelClass ?>::STATUS_DELETE;
                     $model->save();
                     break;
                 <?php endif; ?>default:

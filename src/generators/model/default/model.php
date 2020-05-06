@@ -41,9 +41,24 @@ use wodrow\yii2wtools\behaviors\Uuid;
  * @property <?= $relation[1] . ($relation[2] ? '[]' : '') . ' $' . lcfirst($name) . "\n" ?>
 <?php endforeach; ?>
 <?php endif; ?>
+ * @property array $statusDesc
  */
 class <?= $className ?> extends <?= '\\' . ltrim($generator->extendModelClass, '\\') . "\n" ?>
 {
+    const STATUS_DELETE = -10;
+    const STATUS_ACTIVE = 10;
+
+    /**
+     * @return array
+     */
+    public function getStatusDesc()
+    {
+        return [
+            self::STATUS_DELETE => "已删除",
+            self::STATUS_ACTIVE => "正常",
+        ];
+    }
+
     public function behaviors()
     {
         return ArrayHelper::merge(parent::behaviors(), [
