@@ -41,7 +41,7 @@ use wodrow\yii2wtools\behaviors\Uuid;
  * @property <?= $relation[1] . ($relation[2] ? '[]' : '') . ' $' . lcfirst($name) . "\n" ?>
 <?php endforeach; ?>
 <?php endif; ?>
- * @property array $statusDesc
+ * @property-read array $statusDesc
  */
 class <?= $className ?> extends <?= '\\' . ltrim($generator->extendModelClass, '\\') . "\n" ?>
 {
