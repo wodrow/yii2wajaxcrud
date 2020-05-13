@@ -134,6 +134,7 @@ class Generator extends \yii\gii\generators\model\Generator
             if ($column->allowNull){
                 $types['default'][] = $column->name;
             }
+            $types['trim'][] = $column->name;
             switch ($column->type) {
                 case Schema::TYPE_SMALLINT:
                 case Schema::TYPE_INTEGER:
