@@ -42,6 +42,7 @@ use yii\bootstrap\Modal;
 use wodrow\wajaxcrud\CrudAsset;
 use wodrow\wajaxcrud\BulkButtonWidget;
 use wodrow\yii2wtools\tools\JsBlock;
+use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
 <?= !empty($generator->searchModelClass) ? "/* @var \$searchModel " . ltrim($generator->searchModelClass, '\\') . " */\n" : '' ?>
@@ -120,6 +121,7 @@ CrudAsset::register($this);
                             'timePicker' => true,
                             'timePicker24Hour' => true,
                             'timePickerSeconds' => true,
+                            'showWeekNumbers' => true,
                             'showDropdowns' => true,
                             'timePickerIncrement' => 1,
                             'locale' => [
@@ -132,9 +134,11 @@ CrudAsset::register($this);
                                 'monthNames' => ["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
                             ],
                         ],
-                        'useWithAddon' => false,
-                        'presetDropdown' => false,
+                        'presetDropdown' => true,
                         'pjaxContainerId' => "crud-datatable-pjax",
+                        'pluginEvents' => [
+                            'cancel.daterangepicker' => new JsExpression("function(ev, picker) {let e13=$.Event('keydown');e13.keyCode=13;let _input=$(this);if(!$(this).is('input')){_input=$(this).parent().find('input:hidden');}_input.val('').trigger(e13);}"),
+                        ],
                     ]),
                 ],
                 <?php elseif (in_array($name, $thumbImageFields)): ?>[
