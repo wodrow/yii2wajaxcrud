@@ -121,7 +121,7 @@ CrudAsset::register($this);
                             'timePicker24Hour' => true,
                             'timePickerSeconds' => true,
                             'showDropdowns' => true,
-                            'timePickerIncrement' => 30,
+                            'timePickerIncrement' => 1,
                             'locale' => [
                                 'format' => "Y-m-d H:i:s",
                                 'applyLabel' => "确认",
