@@ -135,7 +135,8 @@ CrudAsset::register($this);
                             ],
                         ],
                         'presetDropdown' => true,
-                        'autoUpdateOnInit' => true,
+                        'autoUpdateOnInit' => false,
+                        'useWithAddon' => true,
                         'pjaxContainerId' => "crud-datatable-pjax",
                         'pluginEvents' => [
                             'cancel.daterangepicker' => new JsExpression("function(ev, picker) {let e13=$.Event('keydown');e13.keyCode=13;let _input=$(this);if(!$(this).is('input')){_input=$(this).parent().find('input:hidden');}_input.val('').trigger(e13);}"),
