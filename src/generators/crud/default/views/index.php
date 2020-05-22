@@ -190,17 +190,22 @@ CrudAsset::register($this);
                     ],
                 ],
                 [
-                    'class' => DataColumn::class,
-                    'label' => '更多操作',
-                    'format' => 'raw',
+                    'class' => ActionColumn::class,
+                    'header' => '其他操作',
+                    'template' => '{test}',
                     'mergeHeader' => true,
-                    'value' => function ($m) {
-                        return Html::a('操作名test', ['test', 'id' => $m-><?=$pk ?>], [
-                            'title' => 'title',
-                            'role' => 'modal-remote',
-                            'data-toggle' => 'tooltip',
-                        ]);
-                    },
+                    'buttons' => [
+                        'test' => function ($url, $model, $key) {
+                            $url = Url::to(["tx/test" , 'id' => $key]);
+                            return Html::a('Test', $url, [
+                                'title' => Yii::t('yii', 'Test'),
+                                'aria-label' => Yii::t('yii', 'Test'),
+                                'data-pjax' => '0',
+                                'role' => 'modal-remote',
+                                'data-toggle' => 'tooltip',
+                            ]);
+                        },
+                    ],
                     'contentOptions' => ['style' => 'vertical-align: middle;'],
                 ],
             ],
