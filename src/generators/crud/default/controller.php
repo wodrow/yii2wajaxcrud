@@ -124,12 +124,12 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title' => "<?= $modelClass ?> #".<?= $actionParams ?>,
+                    'title' => "<?= $modelClass ?>({<?= $actionParams ?>})",
                     'content' => $this->renderAjax('view', [
                         'model' => $this->findModel(<?= $actionParams ?>),
                     ]),
-                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left','data-dismiss' => "modal"]).
-                            Html::a('Edit', ['update','<?= substr($actionParams,1) ?>' => <?= $actionParams ?>], ['class' => 'btn btn-primary','role' => 'modal-remote'])
+                    'footer' => Html::button('关闭', ['class' => 'btn btn-default pull-left','data-dismiss' => "modal"]).
+                            Html::a('编辑', ['update','<?= substr($actionParams,1) ?>' => <?= $actionParams ?>], ['class' => 'btn btn-primary','role' => 'modal-remote'])
                 ];    
         }else{
             return $this->render('view', [
@@ -153,12 +153,12 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title' => "Create new <?= $modelClass ?>",
+                    'title' => "新建 <?= $modelClass ?>",
                     'content' => $this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left','data-dismiss' => "modal"]).
-                                Html::button('Save', ['class' => 'btn btn-primary','type' => "submit"])
+                    'footer' => Html::button('关闭', ['class' => 'btn btn-default pull-left','data-dismiss' => "modal"]).
+                                Html::button('保存', ['class' => 'btn btn-primary','type' => "submit"])
         
                 ];         
             }else if($model->load($request->post()) && $model->save()){
@@ -166,18 +166,18 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                     'forceReload' => '#crud-datatable-pjax',
                     'title' => "Create new <?= $modelClass ?>",
                     'content' => '<span class="text-success">Create <?= $modelClass ?> success</span>',
-                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left','data-dismiss' => "modal"]).
-                            Html::a('Create More', ['create'], ['class' => 'btn btn-primary','role' => 'modal-remote'])
+                    'footer' => Html::button('关闭', ['class' => 'btn btn-default pull-left','data-dismiss' => "modal"]).
+                            Html::a('新建更多', ['create'], ['class' => 'btn btn-primary','role' => 'modal-remote'])
         
                 ];         
             }else{           
                 return [
-                    'title' => "Create new <?= $modelClass ?>",
+                    'title' => "新建 <?= $modelClass ?>",
                     'content' => $this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left','data-dismiss' => "modal"]).
-                                Html::button('Save', ['class' => 'btn btn-primary','type' => "submit"])
+                    'footer' => Html::button('关闭', ['class' => 'btn btn-default pull-left','data-dismiss' => "modal"]).
+                                Html::button('保存', ['class' => 'btn btn-primary','type' => "submit"])
         
                 ];         
             }
@@ -211,12 +211,12 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title' => "Update <?= $modelClass ?> #".<?= $actionParams ?>,
+                    'title' => "修改 <?= $modelClass ?>({<?= $actionParams ?>})",
                     'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left','data-dismiss' => "modal"]).
-                                Html::button('Save', ['class' => 'btn btn-primary','type' => "submit"])
+                    'footer' => Html::button('关闭', ['class' => 'btn btn-default pull-left','data-dismiss' => "modal"]).
+                                Html::button('保存', ['class' => 'btn btn-primary','type' => "submit"])
                 ];         
             }else if($model->load($request->post()) && $model->save()){
                 return [
@@ -225,17 +225,17 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                     'content' => $this->renderAjax('view', [
                         'model' => $model,
                     ]),
-                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left','data-dismiss' => "modal"]).
-                            Html::a('Edit', ['update','<?= substr($actionParams,1) ?>' => <?= $actionParams ?>], ['class' => 'btn btn-primary','role' => 'modal-remote'])
+                    'footer' => Html::button('关闭', ['class' => 'btn btn-default pull-left','data-dismiss' => "modal"]).
+                            Html::a('编辑', ['update','<?= substr($actionParams,1) ?>' => <?= $actionParams ?>], ['class' => 'btn btn-primary','role' => 'modal-remote'])
                 ];    
             }else{
                  return [
-                    'title' => "Update <?= $modelClass ?> #".<?= $actionParams ?>,
+                    'title' => "修改 <?= $modelClass ?> #".<?= $actionParams ?>,
                     'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left','data-dismiss' => "modal"]).
-                                Html::button('Save', ['class' => 'btn btn-primary','type' => "submit"])
+                    'footer' => Html::button('关闭', ['class' => 'btn btn-default pull-left','data-dismiss' => "modal"]).
+                                Html::button('保存', ['class' => 'btn btn-primary','type' => "submit"])
                 ];        
             }
         }else{
@@ -326,12 +326,12 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                'title' => "test <?= $modelClass ?> #".<?= $actionParams ?>,
+                'title' => "test <?= $modelClass ?>({<?= $actionParams ?>})",
                     'content' => $this->renderAjax('test', [
                     'model' => $model,
                 ]),
                 'footer' =>
-                    Html::button('Close', ['class' => 'btn btn-default pull-left','data-dismiss' => "modal"]).
+                    Html::button('关闭', ['class' => 'btn btn-default pull-left','data-dismiss' => "modal"]).
                     Html::button('test', ['class' => 'btn btn-primary', 'type' => "submit"]),
                 ];
             }elseif($model->load($request->post()) && $model->validate()){
@@ -339,12 +339,12 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                 return ['forceClose' => true,'forceReload' => '#crud-datatable-pjax'];
             }else{
                 return [
-                    'title' => "test <?= $modelClass ?> #".<?= $actionParams ?>,
+                    'title' => "test <?= $modelClass ?>({<?= $actionParams ?>})",
                     'content' => $this->renderAjax('test', [
                     'model' => $model,
                 ]),
                 'footer' =>
-                    Html::button('Close', ['class' => 'btn btn-default pull-left','data-dismiss' => "modal"]).
+                    Html::button('关闭', ['class' => 'btn btn-default pull-left','data-dismiss' => "modal"]).
                     Html::button('test', ['class' => 'btn btn-primary', 'type' => "submit"]),
                 ];
             }

@@ -180,7 +180,7 @@ CrudAsset::register($this);
                     'updateOptions' => ['role' => 'modal-remote', 'title' => "Update", 'data-toggle' => "tooltip"],
                     'deleteOptions' => [
                         'role' => 'modal-remote',
-                        'title' => "Delete",
+                        'title' => "删除",
                         'data-confirm' => false,
                         'data-method' => false, // for overide yii data api
                         'data-request-method' => "post",
@@ -211,7 +211,7 @@ CrudAsset::register($this);
             'toolbar' => [
                 ['content' =>
                     Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'],
-                    ['role' => "modal-remote", 'title' => "Create new <?= Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass))) ?>", 'class' => "btn btn-default"]).
+                    ['role' => "modal-remote", 'title' => "新建 <?= Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass))) ?>", 'class' => "btn btn-default"]).
                     Html::a('<i class="glyphicon glyphicon-repeat"></i>', [''],
                     ['data-pjax' => 1, 'class' => "btn btn-default", 'title' => "Reset Grid"]).
                     '{toggleData}'.
