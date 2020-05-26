@@ -35,6 +35,7 @@ class Generator extends \yii\gii\Generator
     public $thumbImageFields;
     public $isDesc = true;
     public $statusField = 'status';
+    public $enableI18N = true;
 
     /**
      * @inheritdoc

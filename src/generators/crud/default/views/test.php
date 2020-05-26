@@ -24,25 +24,23 @@ use kartik\form\ActiveForm;
 /* @var $form \kartik\form\ActiveForm */
 ?>
 <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-test">
-
-    <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-form">
-
-        <?= "<?php " ?>$form = ActiveForm::begin(); ?>
-
-<?php foreach ($generator->getColumnNames() as $attribute) {
-    if (in_array($attribute, $safeAttributes)) {
-        echo "    <?= " . $generator->generateActiveField($attribute) . " ?>\n\n";
-    }
-} ?>
-
-        <?='<?php if (!Yii::$app->request->isAjax){ ?>'."\n"?>
-        <div class="form-group">
-            <?= "<?= " ?>Html::submitButton("test", ['class' => 'btn btn-primary']) ?>
-        </div>
-        <?="<?php } ?>\n"?>
-
-        <?= "<?php " ?>ActiveForm::end(); ?>
-
+    <div class="row">
+        <div class="col-sm-12"><?="<?= \$this->render(\"_detail-view\", ['model' => \$model]) ?>" ?></div>
+        <div class="col-sm-12"></div>
     </div>
+    <div class="col-sm-12">
+        <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-form-test">
+            <?="<?php " ?>$form = ActiveForm::begin(); ?><?="\n" ?>
+<?php foreach ($generator->getColumnNames() as $attribute): ?>
+<?php if (in_array($attribute, $safeAttributes)): ?>
+            <?="<?=" . $generator->generateActiveField($attribute) . " ?>\n"; ?><?php endif; ?><?php endforeach; ?>
+            <?='<?php if (!Yii::$app->request->isAjax){ ?>'."\n"?>
+            <div class="form-group">
+                <?= "<?= " ?>Html::submitButton($model->isNewRecord ? <?= $generator->generateString('Create') ?> : <?= $generator->generateString('Update') ?>, ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+            </div>
+            <?="<?php } ?>\n"?>
+            <?= "<?php " ?>ActiveForm::end(); ?>
 
+        </div>
+    </div>
 </div>

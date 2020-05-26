@@ -20,7 +20,7 @@ echo "<?php\n";
 namespace <?= $generator->ns ?>;
 
 use Yii;
-use yii\helpers\ArrayHelper;
+use wodrow\yii2wtools\tools\ArrayHelper;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 

@@ -196,7 +196,6 @@ CrudAsset::register($this);
                     'mergeHeader' => true,
                     'buttons' => [
                         'test' => function ($url, $model, $key) {
-                            $url = Url::to(["tx/test" , 'id' => $key]);
                             return Html::a('Test', $url, [
                                 'title' => Yii::t('yii', 'Test'),
                                 'aria-label' => Yii::t('yii', 'Test'),
