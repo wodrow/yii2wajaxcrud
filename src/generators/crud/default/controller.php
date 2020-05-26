@@ -360,6 +360,29 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     }
 
     /**
+     * Delete multiple existing <?= $modelClass ?> model.
+     * For ajax request will return json object
+     * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
+     * <?= implode("\n     * ", $actionParamComments) . "\n" ?>
+     * @return mixed
+     */
+    public function actionBulktest()
+    {
+        $request = Yii::$app->request;
+        $pks = explode(',', $request->post( 'pks' ));
+        foreach ( $pks as $pk ) {
+            $model = $this->findModel($pk);
+            # TO DO
+        }
+        if($request->isAjax){
+        Yii::$app->response->format = Response::FORMAT_JSON;
+            return ['forceClose' => true,'forceReload' => '#crud-datatable-pjax'];
+        }else{
+            return $this->redirect(['index']);
+        }
+    }
+
+    /**
      * Finds the <?= $modelClass ?> model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * <?= implode("\n     * ", $actionParamComments) . "\n" ?>

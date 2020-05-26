@@ -230,6 +230,14 @@ CrudAsset::register($this);
                         'data-request-method' => "post",
                         'data-confirm-title' => "删除数据提示!",
                         'data-confirm-message' => "你确认要删除这些数据吗?"
+                    ])." ".
+                    Html::a('<i class="glyphicon glyphicon-wrench"></i> test选择', ["bulktest"], [
+                        "class" => "btn btn-warning btn-xs",
+                        'role' => "modal-remote-bulk",
+                        'data-confirm' => false, 'data-method' => false,
+                        'data-request-method' => "post",
+                        'data-confirm-title' => "test数据提示!",
+                        'data-confirm-message' => "你确认要test这些数据吗?"
                     ]),
                 ]).
                 '<div class="clearfix"></div>',
