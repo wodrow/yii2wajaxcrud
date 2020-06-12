@@ -54,15 +54,19 @@ if (!is_null($value) && strpos($value, ' - ') !== false ) {
         $(document).on('click', "button[_name='ranger-filter']", function (e) {
             let minV = $(this).parents("#<?=$wid ?>").find("input[_name='range-v']").attr('data-minV');
             let maxV = $(this).parents("#<?=$wid ?>").find("input[_name='range-v']").attr('data-maxV');
-            if (!rangeColumnIsNumber(minV)){
-                alert("最小值必须为数字");
-                return ;
+            if (minV) {
+                if (!rangeColumnIsNumber(minV)){
+                    alert("最小值必须为数字");
+                    return ;
+                }
             }
             if (maxV) {
                 if (!rangeColumnIsNumber(maxV)){
                     alert("最大值必须为数字");
                     return ;
                 }
+            }
+            if (minV && maxV){
                 if (maxV < minV){
                     alert("最大值必须大于最小值");
                     return ;
