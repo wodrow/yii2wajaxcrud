@@ -16,6 +16,7 @@ $actionParams = $generator->generateActionParams();
 
 $editableFields = $generator->generateEditableFields();
 $dateRangeFields = $generator->generateDateRangeFields();
+$rangeFields = $generator->generateRangeFields();
 $thumbImageFields = $generator->generateThumbImageFields();
 $statusField = $generator->statusField;
 
@@ -35,7 +36,9 @@ use kartik\grid\CheckboxColumn;
 use kartik\grid\ExpandRowColumn;
 use kartik\grid\EnumColumn;
 use kartik\grid\ActionColumn;
+use kartik\grid\FormulaColumn;
 use kartik\daterange\DateRangePicker;
+use wodrow\wajaxcrud\rangecolumn\RangeColumn;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\bootstrap\Modal;
@@ -142,6 +145,12 @@ CrudAsset::register($this);
                             'cancel.daterangepicker' => new JsExpression("function(ev, picker) {let e13=$.Event('keydown');e13.keyCode=13;let _input=$(this);if(!$(this).is('input')){_input=$(this).parent().find('input:hidden');}_input.val('').trigger(e13);}"),
                         ],
                     ]),
+                ],
+                <?php elseif (in_array($name, $rangeFields)): ?>[
+                    'class' => RangeColumn::class,
+                    'attribute' => "<?=$name ?>",
+                    'hAlign' => GridView::ALIGN_CENTER,
+                    'vAlign' => GridView::ALIGN_MIDDLE,
                 ],
                 <?php elseif (in_array($name, $thumbImageFields)): ?>[
                     'class' => DataColumn::class,

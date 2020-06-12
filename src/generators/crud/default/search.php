@@ -106,11 +106,16 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
      * @param ActiveQuery $query
      * @param $attribute
      */
-    protected function _timeFilter(&$query, $attribute)
+    protected function _rangeFilter(&$query, $attribute, $isDate = false)
     {
         if ( ! is_null($this->$attribute) && strpos($this->$attribute, ' - ') !== false ) {
             list($s, $e) = explode(' - ', $this->$attribute);
-            $query->andFilterWhere(['between', $attribute, strtotime($s), strtotime($e)]);
+            if ($isDate){
+                $s = strtotime($s);
+                $e = strtotime($e);
+            }
+            if ($s)$query->andFilterWhere(['>=', $attribute, $s]);
+            if ($e)$query->andFilterWhere(['<=', $attribute, $e]);
         }
     }
 

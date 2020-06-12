@@ -32,6 +32,7 @@ class Generator extends \yii\gii\Generator
     public $searchModelClass = '';
     public $editableFields;
     public $dateRangeFields;
+    public $rangeFields;
     public $thumbImageFields;
     public $isDesc = true;
     public $statusField = 'status';
@@ -60,7 +61,7 @@ class Generator extends \yii\gii\Generator
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['controllerClass', 'modelClass', 'searchModelClass', 'baseControllerClass', 'viewPath', 'editableFields', 'dateRangeFields', 'thumbImageFields', 'statusField'], 'filter', 'filter' => 'trim'],
+            [['controllerClass', 'modelClass', 'searchModelClass', 'baseControllerClass', 'viewPath', 'editableFields', 'dateRangeFields', 'rangeFields', 'thumbImageFields', 'statusField'], 'filter', 'filter' => 'trim'],
             [['modelClass', 'controllerClass', 'baseControllerClass'], 'required'],
             [['searchModelClass'], 'compare', 'compareAttribute' => 'modelClass', 'operator' => '!==', 'message' => 'Search Model Class must not be equal to Model Class.'],
             [['modelClass', 'controllerClass', 'baseControllerClass', 'searchModelClass'], 'match', 'pattern' => '/^[\w\\\\]*$/', 'message' => 'Only word characters and backslashes are allowed.'],
@@ -76,6 +77,7 @@ class Generator extends \yii\gii\Generator
             ['viewPath', 'safe'],
             ['editableFields', 'validateEditableFields'],
             ['dateRangeFields', 'validateDateRangeFields'],
+            ['rangeFields', 'validateRangeFields'],
             ['thumbImageFields', 'validateThumbImageFields'],
             ['statusField', 'validateStatusField'],
         ]);
@@ -94,6 +96,7 @@ class Generator extends \yii\gii\Generator
             'searchModelClass' => 'Search Model Class',
             'editableFields' => 'Editable Fields',
             'dateRangeFields' => 'Date Range Fields',
+            'rangeFields' => 'range Fields',
             'thumbIamgeFields' => 'Thumb Image Fields',
             'statusFields' => 'Status Field',
         ]);
@@ -158,10 +161,10 @@ class Generator extends \yii\gii\Generator
         $field = trim($field);
         $pk = $class::primaryKey();
         if (in_array($field, $pk)) {
-            $this->addError('dateRangeFields', "primary key(s) can not be status");
+            $this->addError('statusFields', "primary key(s) can not be status");
         }
         if (!in_array($field, (new $class)->attributes())) {
-            $this->addError('dateRangeFields', "field '{$field}' not found!");
+            $this->addError('statusFields', "field '{$field}' not found!");
         }
     }
 
@@ -205,6 +208,26 @@ class Generator extends \yii\gii\Generator
         }
     }
 
+    public function validateRangeFields()
+    {
+        $class = $this->modelClass;
+        $fields = explode(',', $this->rangeFields);
+        $pk = $class::primaryKey();
+        foreach ($fields as $k => $v) {
+            if (!$v)continue;
+            $v = trim($v);
+            if (in_array($v, $pk)) {
+                $this->addError('rangeFields', "primary key(s) can not be date range");
+            }
+            if (!in_array($v, (new $class)->attributes())) {
+                $this->addError('rangeFields', "field '{$v}' not found!");
+            }
+            if (!$this->checkResuing()) {
+                $this->addError('rangeFields', "can not be range");
+            }
+        }
+    }
+
     public function validateThumbImageFields()
     {
         $class = $this->modelClass;
@@ -228,11 +251,12 @@ class Generator extends \yii\gii\Generator
     public function checkResuing()
     {
         $a = $this->generateDateRangeFields();
+        $a1 = $this->generateRangeFields();
         $b = $this->generateEditableFields();
         $c = $this->generateThumbImageFields();
         $d = $this->statusField?[$this->statusField]:[];
-        $x = array_merge(array_merge(array_merge($a, $b), $c), $d);
-        $t1 = count($a) + count($b) + count($c) + count($d);
+        $x = array_merge(array_merge(array_merge(array_merge($a, $a1), $b), $c), $d);
+        $t1 = count($a) + count($a1) + count($b) + count($c) + count($d);
         $t2 = count($x);
         if ($t1 > $t2){
             return false;
@@ -321,6 +345,17 @@ class Generator extends \yii\gii\Generator
     public function generateDateRangeFields()
     {
         $fields = explode(',', $this->dateRangeFields);
+        foreach ($fields as $k => $v) {
+            if (!$v){
+                unset($fields[$k]);
+            }
+        }
+        return $fields;
+    }
+
+    public function generateRangeFields()
+    {
+        $fields = explode(',', $this->rangeFields);
         foreach ($fields as $k => $v) {
             if (!$v){
                 unset($fields[$k]);
@@ -437,6 +472,9 @@ class Generator extends \yii\gii\Generator
                 // [['created_at'], 'match', 'pattern' => '/^.+\s\-\s.+$/'],
                 $types['match']['columns'][] = $column->name;
                 $types['match']['pattern'] = '/^.+\s\-\s.+$/';
+            }elseif (in_array($column->name, $this->generateRangeFields())){
+                $types['match']['columns'][] = $column->name;
+                $types['match']['pattern'] = '/^.+\s\-\s.+$/';
             }else{
                 switch ($column->type) {
                     /*case Schema::TYPE_SMALLINT:
@@ -538,7 +576,9 @@ class Generator extends \yii\gii\Generator
         $hashConditions = [];
         foreach ($columns as $column => $type) {
             if (in_array($column, $this->generateDateRangeFields())){
-                $conditions[] = "\$this->_timeFilter(\$query, '{$column}');\n";
+                $conditions[] = "\$this->_rangeFilter(\$query, '{$column}', true);\n";
+            }elseif (in_array($column, $this->generateRangeFields())){
+                $conditions[] = "\$this->_rangeFilter(\$query, '{$column}');\n";
             }else{
                 switch ($type) {
                     case Schema::TYPE_SMALLINT:
