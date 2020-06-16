@@ -124,18 +124,18 @@ class Generator extends \yii\gii\generators\model\Generator
     {
         $types = [];
         $lengths = [];
+        $defaults = [];
         foreach ($table->columns as $column) {
             if ($column->autoIncrement) {
                 continue;
             }
+            $types['trim'][] = $column->name;
             if (!$column->allowNull && $column->defaultValue === null) {
                 $types['required'][] = $column->name;
             }
-            if ($column->allowNull){
-                $types['default'][] = $column->name;
-            }
-            if ($column->defaultValue !== null){
-                $types['trim'][] = $column->name;
+            if ($column->defaultValue !== null || $column->allowNull){
+                $defaultValue = $column->defaultValue?:null;
+                $defaults[$defaultValue][] = $column->name;
             }
             switch ($column->type) {
                 case Schema::TYPE_SMALLINT:
@@ -166,22 +166,25 @@ class Generator extends \yii\gii\generators\model\Generator
                     } else {
                         $types['string'][] = $column->name;
                     }
+                    break;
             }
         }
         $rules = [];
         $driverName = $this->getDbDriverName();
         foreach ($types as $type => $columns) {
+            $defaultValue = $column->defaultValue?:null;
             if ($driverName === 'pgsql' && $type === 'integer') {
-                $rules[] = "[['" . implode("', '", $columns) . "'], 'default', 'value' => null]";
+                $rules[] = "[['" . implode("', '", $columns) . "'], 'default', 'value' => {$defaultValue}]";
             }
-            $rules[] = "[['" . implode("', '", $columns) . "'], '$type']";
+            $rules[] = "[['" . implode("', '", $columns) . "'], '{$type}']";
         }
         foreach ($lengths as $length => $columns) {
-            $rules[] = "[['" . implode("', '", $columns) . "'], 'string', 'max' => $length]";
+            $rules[] = "[['" . implode("', '", $columns) . "'], 'string', 'max' => {$length}]";
         }
-
+        foreach ($defaults as $defaultValue => $columns) {
+            $rules[] = "[['" . implode("', '", $columns) . "'], 'default', 'value' => {$defaultValue}]";
+        }
         $db = $this->getDbConnection();
-
         // Unique indexes rules
         try {
             $uniqueIndexes = array_merge($db->getSchema()->findUniqueIndexes($table), [$table->primaryKey]);
