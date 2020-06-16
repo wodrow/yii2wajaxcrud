@@ -161,7 +161,7 @@ CrudAsset::register($this);
                     'enableSorting' => false,
                     'format' => 'raw',
                     'value' => function ($m) {
-                        return Html::a(Html::img($m-><?=$name ?>, ['alt' => '缩略图', 'width' => 120]), $m-><?=$name ?>);
+                        return $m-><?=$name ?>?Html::a(Html::img($m-><?=$name ?>, ['alt' => '缩略图', 'width' => 120]), $m-><?=$name ?>):'';
                     },
                 ],
                 <?php elseif ($name == $statusField): ?>[
