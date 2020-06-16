@@ -134,7 +134,7 @@ class Generator extends \yii\gii\generators\model\Generator
                 $types['required'][] = $column->name;
             }
             if ($column->defaultValue !== null || $column->allowNull){
-                $defaultValue = $column->defaultValue?:null;
+                $defaultValue = $column->defaultValue?:'null';
                 $defaults[$defaultValue][] = $column->name;
             }
             switch ($column->type) {
