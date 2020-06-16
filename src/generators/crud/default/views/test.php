@@ -29,18 +29,6 @@ use kartik\form\ActiveForm;
         <div class="col-sm-12"></div>
     </div>
     <div class="col-sm-12">
-        <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-form-test">
-            <?="<?php " ?>$form = ActiveForm::begin(); ?><?="\n" ?>
-<?php foreach ($generator->getColumnNames() as $attribute): ?>
-<?php if (in_array($attribute, $safeAttributes)): ?>
-            <?="<?=" . $generator->generateActiveField($attribute) . " ?>\n"; ?><?php endif; ?><?php endforeach; ?>
-            <?='<?php if (!Yii::$app->request->isAjax){ ?>'."\n"?>
-            <div class="form-group">
-                <?= "<?= " ?>Html::submitButton($model->isNewRecord ? <?= $generator->generateString('Create') ?> : <?= $generator->generateString('Update') ?>, ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-            </div>
-            <?="<?php } ?>\n"?>
-            <?= "<?php " ?>ActiveForm::end(); ?>
-
-        </div>
+        <?="<?= \$this->render(\"_form\", ['model' => \$model]) ?>" ?>
     </div>
 </div>
