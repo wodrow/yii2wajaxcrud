@@ -29,6 +29,6 @@ use kartik\form\ActiveForm;
         <div class="col-sm-12"></div>
     </div>
     <div class="col-sm-12">
-        <?="<?= \$this->render(\"_form\", ['model' => \$model]) ?>" ?>
+        <div><?="<?= \$this->render(\"_form\", ['model' => \$model]) ?>" ?></div>
     </div>
 </div>
