@@ -20,13 +20,13 @@ if (!is_null($value) && strpos($value, ' - ') !== false ) {
 ?>
 
 <div id="<?=$wid ?>">
-    <?=Html::activeInput('hidden', $model, $attribute, ['class' => "form-control range-v", 'placeholder' => "区间", '_name' => "range-v", 'data-minV' => $s, 'data-maxV' => $e]); ?>
+    <?=Html::activeInput('hidden', $model, $attribute, ['class' => "form-control range-v", 'placeholder' => "区间", '_id' => "range-v-".$wid, 'data-minV' => $s, 'data-maxV' => $e]); ?>
     <div class="input-group">
         <span class="input-group-addon" _name="min-v" contenteditable="true"><?=$s ?></span>
         <span class="input-group-addon">~</span>
         <span class="input-group-addon" _name="max-v" contenteditable="true"><?=$e ?></span>
         <span class="input-group-btn">
-            <button class="btn btn-primary" type="button" _name="ranger-filter">确定</button>
+            <button class="btn btn-primary" type="button" _id="ranger-filter-<?=$wid ?>">确定</button>
         </span>
     </div>
 </div>
@@ -45,15 +45,15 @@ if (!is_null($value) && strpos($value, ' - ') !== false ) {
         }
         $(document).on('input', "span[_name='min-v']", function (e) {
             let minV = e.target.innerHTML;
-            $("#<?=$wid ?>").find("input[_name='range-v']").attr('data-minV', minV);
+            $("#<?=$wid ?>").find("input[_id='range-v-<?=$wid ?>']").attr('data-minV', minV);
         });
         $(document).on('input', "span[_name='max-v']", function (e) {
             let maxV = e.target.innerHTML;
-            $("#<?=$wid ?>").find("input[_name='range-v']").attr('data-maxV', maxV);
+            $("#<?=$wid ?>").find("input[_id='range-v-<?=$wid ?>']").attr('data-maxV', maxV);
         });
-        $(document).on('click', "button[_name='ranger-filter']", function (e) {
-            let minV = $(this).parents("#<?=$wid ?>").find("input[_name='range-v']").attr('data-minV');
-            let maxV = $(this).parents("#<?=$wid ?>").find("input[_name='range-v']").attr('data-maxV');
+        $(document).on('click', "button[_id='ranger-filter-<?=$wid ?>']", function (e) {
+            let minV = $(this).parents("#<?=$wid ?>").find("input[_id='range-v-<?=$wid ?>']").attr('data-minV');
+            let maxV = $(this).parents("#<?=$wid ?>").find("input[_id='range-v-<?=$wid ?>']").attr('data-maxV');
             if (minV) {
                 if (!rangeColumnIsNumber(minV)){
                     alert("最小值必须为数字");
@@ -78,7 +78,7 @@ if (!is_null($value) && strpos($value, ' - ') !== false ) {
             if (!minV && maxV)rangeV = " - " + maxV;
             if (minV && maxV)rangeV = minV + " - " + maxV;
             let e13=$.Event('keydown');e13.keyCode=13;
-            $("#<?=$wid ?>").find("input[_name='range-v']").val(rangeV).trigger(e13);
+            $("#<?=$wid ?>").find("input[_id='range-v-<?=$wid ?>']").val(rangeV).trigger(e13);
 
         });
     });
