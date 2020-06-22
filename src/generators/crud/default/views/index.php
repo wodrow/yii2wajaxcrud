@@ -9,7 +9,7 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $generator \wodrow\wajaxcrud\generators\crud\Generator */
-$modelClass = StringHelper::basename($generator->modelClass);
+$modelClass = StringHelper::basename($generator->formModelClass);
 $urlParams = $generator->generateUrlParams();
 $nameAttribute = $generator->getNameAttribute();
 $actionParams = $generator->generateActionParams();
@@ -51,13 +51,13 @@ use yii\web\JsExpression;
 <?= !empty($generator->searchModelClass) ? "/* @var \$searchModel " . ltrim($generator->searchModelClass, '\\') . " */\n" : '' ?>
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = <?= $generator->generateString(Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass)))) ?>;
+$this->title = <?= $generator->generateString(Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->formModelClass)))) ?>;
 $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);
 
 ?>
-<div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-index">
+<div class="<?= Inflector::camel2id(StringHelper::basename($generator->formModelClass)) ?>-index">
     <div id="ajaxCrudDatatable">
         <?="<?= "?>GridView::widget([
             'id' => 'crud-datatable',

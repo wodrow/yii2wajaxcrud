@@ -19,11 +19,11 @@ use yii\helpers\Html;
 use kartik\form\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model <?= ltrim($generator->modelClass, '\\') ?> */
+/* @var $model <?= ltrim($generator->formModelClass, '\\') ?> */
 /* @var $form \kartik\form\ActiveForm */
 ?>
 
-<div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-form">
+<div class="<?= Inflector::camel2id(StringHelper::basename($generator->formModelClass)) ?>-form">
 
     <?= "<?php " ?>$form = ActiveForm::begin(); ?>
 
@@ -34,7 +34,7 @@ use kartik\form\ActiveForm;
 } ?>  
 	<?='<?php if (!Yii::$app->request->isAjax){ ?>'."\n"?>
 	  	<div class="form-group">
-	        <?= "<?= " ?>Html::submitButton($model->isNewRecord ? <?= $generator->generateString('Create') ?> : <?= $generator->generateString('Update') ?>, ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+	        <?= "<?= " ?>Html::submitButton($model->isNewRecord ? <?= $generator->generateString('新建') ?> : <?= $generator->generateString('更新') ?>, ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
 	    </div>
 	<?="<?php } ?>\n"?>
 

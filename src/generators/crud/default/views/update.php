@@ -12,9 +12,9 @@ echo "<?php\n";
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model <?= ltrim($generator->modelClass, '\\') ?> */
+/* @var $model <?= ltrim($generator->formModelClass, '\\') ?> */
 ?>
-<div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-update">
+<div class="<?= Inflector::camel2id(StringHelper::basename($generator->formModelClass)) ?>-update">
 
     <?= "<?= " ?>$this->render('_form', [
         'model' => $model,

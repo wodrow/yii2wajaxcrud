@@ -12,9 +12,13 @@ use yii\db\ActiveRecordInterface;
 
 $controllerClass = StringHelper::basename($generator->controllerClass);
 $modelClass = StringHelper::basename($generator->modelClass);
+$formModelClass = StringHelper::basename($generator->formModelClass);
 $searchModelClass = StringHelper::basename($generator->searchModelClass);
 if ($modelClass === $searchModelClass) {
     $searchModelAlias = $searchModelClass . 'Search';
+}
+if ($modelClass === $formModelClass) {
+    $formModelAlias = $formModelClass . 'Form';
 }
 
 /* @var $class ActiveRecordInterface */
@@ -32,11 +36,9 @@ namespace <?= StringHelper::dirname(ltrim($generator->controllerClass, '\\')) ?>
 
 use Yii;
 use <?= ltrim($generator->modelClass, '\\') ?>;
-<?php if (!empty($generator->searchModelClass)): ?>
 use <?= ltrim($generator->searchModelClass, '\\') . (isset($searchModelAlias) ? " as $searchModelAlias" : "") ?>;
-<?php else: ?>
+use <?= ltrim($generator->formModelClass, '\\') . (isset($formModelClass) ? " as $formModelAlias" : "") ?>;
 use yii\data\ActiveDataProvider;
-<?php endif; ?>
 use <?= ltrim($generator->baseControllerClass, '\\') ?>;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -45,7 +47,7 @@ use yii\helpers\Html;
 use kartik\grid\EditableColumnAction;
 
 /**
- * <?= $controllerClass ?> implements the CRUD actions for <?= $modelClass ?> model.
+ * <?= $controllerClass ?> implements the CRUD actions for <?= $formModelClass ?> model.
  */
 class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->baseControllerClass) . "\n" ?>
 {
@@ -114,7 +116,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
 
 
     /**
-     * Displays a single <?= $modelClass ?> model.
+     * Displays a single <?= $formModelClass ?> model.
      * <?= implode("\n     * ", $actionParamComments) . "\n" ?>
      * @return mixed
      */
@@ -124,7 +126,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title' => "<?= $modelClass ?>({<?= $actionParams ?>})",
+                    'title' => "<?= $formModelClass ?>({<?= $actionParams ?>})",
                     'content' => $this->renderAjax('view', [
                         'model' => $this->findModel(<?= $actionParams ?>),
                     ]),
@@ -139,7 +141,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     }
 
     /**
-     * Creates a new <?= $modelClass ?> model.
+     * Creates a new <?= $formModelAlias ?> model.
      * For ajax request will return json object
      * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
@@ -147,13 +149,13 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     public function actionCreate()
     {
         $request = Yii::$app->request;
-        $model = new <?= $modelClass ?>();  
+        $model = new <?= $formModelAlias ?>();
 
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title' => "新建 <?= $modelClass ?>",
+                    'title' => "新建 <?= $formModelAlias ?>",
                     'content' => $this->renderAjax('create', [
                         'model' => $model,
                     ]),
@@ -164,15 +166,15 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload' => '#crud-datatable-pjax',
-                    'title' => "Create new <?= $modelClass ?>",
-                    'content' => '<span class="text-success">Create <?= $modelClass ?> success</span>',
+                    'title' => "Create new <?= $formModelClass ?>",
+                    'content' => '<span class="text-success">Create <?= $formModelClass ?> success</span>',
                     'footer' => Html::button('关闭', ['class' => 'btn btn-default pull-left','data-dismiss' => "modal"]).
                             Html::a('新建更多', ['create'], ['class' => 'btn btn-primary','role' => 'modal-remote'])
         
                 ];         
             }else{           
                 return [
-                    'title' => "新建 <?= $modelClass ?>",
+                    'title' => "新建 <?= $formModelClass ?>",
                     'content' => $this->renderAjax('create', [
                         'model' => $model,
                     ]),
@@ -193,7 +195,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     }
 
     /**
-     * Updates an existing <?= $modelClass ?> model.
+     * Updates an existing <?= $formModelAlias ?> model.
      * For ajax request will return json object
      * and for non-ajax request if update is successful, the browser will be redirected to the 'view' page.
      * <?= implode("\n     * ", $actionParamComments) . "\n" ?>
@@ -211,7 +213,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title' => "修改 <?= $modelClass ?>({<?= $actionParams ?>})",
+                    'title' => "修改 <?= $formModelClass ?>({<?= $actionParams ?>})",
                     'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -221,7 +223,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload' => '#crud-datatable-pjax',
-                    'title' => "<?= $modelClass ?> #".<?= $actionParams ?>,
+                    'title' => "<?= $formModelClass ?> #".<?= $actionParams ?>,
                     'content' => $this->renderAjax('view', [
                         'model' => $model,
                     ]),
@@ -230,7 +232,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                 ];    
             }else{
                  return [
-                    'title' => "修改 <?= $modelClass ?> #".<?= $actionParams ?>,
+                    'title' => "修改 <?= $formModelClass ?> #".<?= $actionParams ?>,
                     'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -253,7 +255,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     }
 
     /**
-     * Delete an existing <?= $modelClass ?> model.
+     * Delete an existing <?= $formModelClass ?> model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * <?= implode("\n     * ", $actionParamComments) . "\n" ?>
@@ -268,7 +270,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                 $model->delete();
                 break;
             <?php if($statusField): ?>case 'soft':
-                $model->status = <?= $modelClass ?>::STATUS_DELETE;
+                $model->status = <?= $formModelClass ?>::STATUS_DELETE;
                 $model->save();
                 break;
             <?php endif; ?>default:
@@ -284,7 +286,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     }
 
      /**
-     * Delete multiple existing <?= $modelClass ?> model.
+     * Delete multiple existing <?= $formModelClass ?> model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * <?= implode("\n     * ", $actionParamComments) . "\n" ?>
@@ -301,7 +303,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                     $model->delete();
                     break;
                 <?php if($statusField): ?>case 'soft':
-                    $model->status = <?= $modelClass ?>::STATUS_DELETE;
+                    $model->status = <?= $formModelClass ?>::STATUS_DELETE;
                     $model->save();
                     break;
                 <?php endif; ?>default:
@@ -326,7 +328,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                'title' => "test <?= $modelClass ?>({<?= $actionParams ?>})",
+                'title' => "test <?= $formModelClass ?>({<?= $actionParams ?>})",
                     'content' => $this->renderAjax('test', [
                     'model' => $model,
                 ]),
@@ -339,7 +341,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                 return ['forceClose' => true,'forceReload' => '#crud-datatable-pjax'];
             }else{
                 return [
-                    'title' => "test <?= $modelClass ?>({<?= $actionParams ?>})",
+                    'title' => "test <?= $formModelClass ?>({<?= $actionParams ?>})",
                     'content' => $this->renderAjax('test', [
                     'model' => $model,
                 ]),
@@ -383,10 +385,10 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     }
 
     /**
-     * Finds the <?= $modelClass ?> model based on its primary key value.
+     * Finds the <?= $formModelAlias ?> model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * <?= implode("\n     * ", $actionParamComments) . "\n" ?>
-     * @return <?=                   $modelClass ?> the loaded model
+     * @return <?=                   $formModelAlias ?> the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel(<?= $actionParams ?>)
@@ -401,7 +403,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             }
             $condition = '[' . implode(', ', $condition) . ']';
         }
-        ?>if (($model = <?= $modelClass ?>::findOne(<?= $condition ?>)) !== null) {
+        ?>if (($model = <?= $formModelAlias ?>::findOne(<?= $condition ?>)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

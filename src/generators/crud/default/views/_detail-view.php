@@ -12,9 +12,9 @@ use wodrow\yii2wtools\tools\ArrayHelper;
 use kartik\detail\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model <?= ltrim($generator->modelClass, '\\') ?> */
+/* @var $model <?= ltrim($generator->formModelClass, '\\') ?> */
 ?>
-<div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-_detail-view">
+<div class="<?= Inflector::camel2id(StringHelper::basename($generator->formModelClass)) ?>-_detail-view">
 
     <?= "<?= " ?>DetailView::widget([
         'model' => $model,

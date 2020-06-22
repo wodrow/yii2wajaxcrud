@@ -1,6 +1,7 @@
 <?php
 namespace wodrow\wajaxcrud\generators\crud;
 
+use wodrow\yii2wtools\tools\FileHelper;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\db\BaseActiveRecord;
@@ -30,6 +31,7 @@ class Generator extends \yii\gii\Generator
     public $viewPath;
     public $baseControllerClass = 'yii\web\Controller';
     public $searchModelClass = '';
+    public $formModelClass = '';
     public $editableFields;
     public $dateRangeFields;
     public $rangeFields;
@@ -61,15 +63,16 @@ class Generator extends \yii\gii\Generator
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['controllerClass', 'modelClass', 'searchModelClass', 'baseControllerClass', 'viewPath', 'editableFields', 'dateRangeFields', 'rangeFields', 'thumbImageFields', 'statusField'], 'filter', 'filter' => 'trim'],
-            [['modelClass', 'controllerClass', 'baseControllerClass'], 'required'],
+            [['controllerClass', 'modelClass', 'searchModelClass', 'formModelClass', 'baseControllerClass', 'viewPath', 'editableFields', 'dateRangeFields', 'rangeFields', 'thumbImageFields', 'statusField'], 'filter', 'filter' => 'trim'],
+            [['modelClass', 'searchModelClass', 'formModelClass', 'controllerClass', 'baseControllerClass'], 'required'],
             [['searchModelClass'], 'compare', 'compareAttribute' => 'modelClass', 'operator' => '!==', 'message' => 'Search Model Class must not be equal to Model Class.'],
+            [['formModelClass'], 'compare', 'compareAttribute' => 'searchModelClass', 'operator' => '!==', 'message' => 'Form Model Class must not be equal to Search Model Class.'],
             [['modelClass', 'controllerClass', 'baseControllerClass', 'searchModelClass'], 'match', 'pattern' => '/^[\w\\\\]*$/', 'message' => 'Only word characters and backslashes are allowed.'],
             [['modelClass'], 'validateClass', 'params' => ['extends' => BaseActiveRecord::className()]],
             [['baseControllerClass'], 'validateClass', 'params' => ['extends' => Controller::className()]],
             [['controllerClass'], 'match', 'pattern' => '/Controller$/', 'message' => 'Controller class name must be suffixed with "Controller".'],
             [['controllerClass'], 'match', 'pattern' => '/(^|\\\\)[A-Z][^\\\\]+Controller$/', 'message' => 'Controller class name must start with an uppercase letter.'],
-            [['controllerClass', 'searchModelClass'], 'validateNewClass'],
+            [['controllerClass', 'searchModelClass', 'formModelClass'], 'validateNewClass'],
             [['modelClass'], 'validateModelClass'],
             [['enableI18N'], 'boolean'],
             [['isDesc'], 'boolean'],
@@ -84,6 +87,28 @@ class Generator extends \yii\gii\Generator
     }
 
     /**
+     * An inline validator that checks if the attribute value refers to a valid namespaced class name.
+     * The validator will check if the directory containing the new class file exist or not.
+     * @param string $attribute the attribute being validated
+     * @param array $params the validation options
+     */
+    public function validateNewClass($attribute, $params)
+    {
+        $class = ltrim($this->$attribute, '\\');
+        if (($pos = strrpos($class, '\\')) === false) {
+            $this->addError($attribute, "The class name must contain fully qualified namespace name.");
+        } else {
+            $ns = substr($class, 0, $pos);
+            $path = Yii::getAlias('@' . str_replace('\\', '/', $ns), false);
+            if ($path === false) {
+                $this->addError($attribute, "The class namespace is invalid: $ns");
+            } elseif (!is_dir($path)) {
+                if (!FileHelper::createDirectory($path))$this->addError($attribute, "Please make sure the directory containing this class exists: $path");
+            }
+        }
+    }
+
+    /**
      * @inheritdoc
      */
     public function attributeLabels()
@@ -94,6 +119,7 @@ class Generator extends \yii\gii\Generator
             'viewPath' => 'View Path',
             'baseControllerClass' => 'Base Controller Class',
             'searchModelClass' => 'Search Model Class',
+            'formModelClass' => 'Form Model Class',
             'editableFields' => 'Editable Fields',
             'dateRangeFields' => 'Date Range Fields',
             'rangeFields' => 'range Fields',
@@ -121,7 +147,9 @@ class Generator extends \yii\gii\Generator
             'baseControllerClass' => 'This is the class that the new CRUD controller class will extend from.
                 You should provide a fully qualified class name, e.g., <code>yii\web\Controller</code>.',
             'searchModelClass' => 'This is the name of the search model class to be generated. You should provide a fully
-                qualified namespaced class name, e.g., <code>app\models\PostSearch</code>.',
+                qualified namespaced class name, e.g., <code>app\models\searchs\Post</code>.',
+            'formModelClass' => 'This is the name of the form model class to be generated. You should provide a fully
+                qualified namespaced class name, e.g., <code>app\models\forms\Post</code>.',
         ]);
     }
 
@@ -278,6 +306,11 @@ class Generator extends \yii\gii\Generator
         if (!empty($this->searchModelClass)) {
             $searchModel = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->searchModelClass, '\\') . '.php'));
             $files[] = new CodeFile($searchModel, $this->render('search.php'));
+        }
+
+        if (!empty($this->formModelClass)) {
+            $formModel = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->formModelClass, '\\') . '.php'));
+            $files[] = new CodeFile($formModel, $this->render('form.php'));
         }
 
         $viewPath = $this->getViewPath();
