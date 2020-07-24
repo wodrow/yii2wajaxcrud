@@ -17,7 +17,7 @@ $searchModelClass = StringHelper::basename($generator->searchModelClass);
 if ($modelClass === $searchModelClass) {
     $searchModelAlias = $searchModelClass . 'Search';
 }
-if ($modelClass === $formModelClass) {
+if ($modelClass === $formModelClass || $searchModelClass === $formModelClass) {
     $formModelAlias = $formModelClass . 'Form';
 }
 
