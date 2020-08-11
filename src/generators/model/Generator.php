@@ -130,12 +130,21 @@ class Generator extends \yii\gii\generators\model\Generator
                 continue;
             }
             $types['trim'][] = $column->name;
-            if (!$column->allowNull && $column->defaultValue === null) {
-                $types['required'][] = $column->name;
-            }
-            if ($column->defaultValue !== null || $column->allowNull){
-                $defaultValue = $column->defaultValue?:'null';
-                $defaults[$defaultValue][] = $column->name;
+            if ($column->allowNull){
+                if ($column->defaultValue === null){
+                    $defaultValue = 'null';
+                    $defaults[$defaultValue][] = $column->name;
+                }else{
+                    $defaultValue = $column->defaultValue;
+                    $defaults[$defaultValue][] = $column->name;
+                }
+            }else{
+                if ($column->defaultValue === null){
+                    $types['required'][] = $column->name;
+                }else{
+                    $defaultValue = $column->defaultValue;
+                    $defaults[$defaultValue][] = $column->name;
+                }
             }
             switch ($column->type) {
                 case Schema::TYPE_SMALLINT:
