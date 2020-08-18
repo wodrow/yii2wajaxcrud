@@ -136,6 +136,7 @@ class Generator extends \yii\gii\generators\model\Generator
                     $defaults[$defaultValue][] = $column->name;
                 }else{
                     $defaultValue = $column->defaultValue;
+                    $defaultValue = is_numeric($defaultValue)?$defaultValue:"'{$defaultValue}'";
                     $defaults[$defaultValue][] = $column->name;
                 }
             }else{
@@ -143,6 +144,7 @@ class Generator extends \yii\gii\generators\model\Generator
                     $types['required'][] = $column->name;
                 }else{
                     $defaultValue = $column->defaultValue;
+                    $defaultValue = is_numeric($defaultValue)?$defaultValue:"'{$defaultValue}'";
                     $defaults[$defaultValue][] = $column->name;
                 }
             }
